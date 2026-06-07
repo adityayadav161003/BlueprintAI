@@ -1,6 +1,0 @@
-# BlueprintAI has been refactored to use 100% vanilla Python standard library modules.
-# This prevents compilation errors (e.g. pydantic-core/chromadb Rust compiles) on Python 3.14.
-#
-# No external packages are required!
-# You can run the application directly with:
-# python main.py
