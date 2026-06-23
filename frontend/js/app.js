@@ -44,16 +44,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let isGenerating = false;
 
     // 1. Sidebar Toggle Action
-    sidebarToggle.addEventListener('click', () => {
+    sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         sidebar.classList.toggle('collapsed');
     });
 
     const collapsedIndicator = document.getElementById('sidebar-collapsed-indicator');
     if (collapsedIndicator) {
-        collapsedIndicator.addEventListener('click', () => {
+        collapsedIndicator.addEventListener('click', (e) => {
+            e.stopPropagation();
             sidebar.classList.remove('collapsed');
         });
     }
+
+    // Expand sidebar when clicked anywhere while collapsed
+    sidebar.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('collapsed')) {
+            sidebar.classList.remove('collapsed');
+        }
+    });
 
 
     // 2. Tab Switching Action

@@ -89,60 +89,80 @@ class GroqClient:
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
 
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers=headers,
-            method="POST",
-        )
+        max_retries = 3
+        retry_delay = 5  # Start with 5 seconds delay
 
-        print(f"[GroqClient] Streaming agent={agent_type} model={self.model}")
-
-        try:
-            with urllib.request.urlopen(req, timeout=120) as response:
-                for raw_line in response:
-                    line = raw_line.decode("utf-8").strip()
-
-                    # SSE format: lines start with "data: "
-                    if not line.startswith("data: "):
-                        continue
-
-                    data_str = line[6:]  # Strip "data: "
-
-                    # "[DONE]" signals end of stream
-                    if data_str == "[DONE]":
-                        return
-
-                    try:
-                        data = json.loads(data_str)
-                        choices = data.get("choices", [])
-                        if not choices:
-                            continue
-                        delta = choices[0].get("delta", {})
-                        content = delta.get("content", "")
-                        if content:
-                            yield content
-                    except (json.JSONDecodeError, KeyError, IndexError):
-                        continue
-
-        except urllib.error.HTTPError as e:
-            error_body = ""
+        for attempt in range(max_retries):
             try:
-                error_body = e.read().decode("utf-8")
-            except Exception:
-                pass
-            raise RuntimeError(
-                f"Groq API HTTP {e.code} error for agent '{agent_type}': {error_body}"
-            ) from e
+                req = urllib.request.Request(
+                    url,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers=headers,
+                    method="POST",
+                )
 
-        except urllib.error.URLError as e:
-            raise RuntimeError(
-                f"Groq API connection failed for agent '{agent_type}': {e.reason}"
-            ) from e
+                print(f"[GroqClient] Streaming agent={agent_type} model={self.model} (Attempt {attempt + 1}/{max_retries})")
 
-        except Exception as e:
-            raise RuntimeError(
-                f"Unexpected error in Groq stream for agent '{agent_type}': {e}"
-            ) from e
+                with urllib.request.urlopen(req, timeout=120) as response:
+                    for raw_line in response:
+                        line = raw_line.decode("utf-8").strip()
+
+                        # SSE format: lines start with "data: "
+                        if not line.startswith("data: "):
+                            continue
+
+                        data_str = line[6:]  # Strip "data: "
+
+                        # "[DONE]" signals end of stream
+                        if data_str == "[DONE]":
+                            return
+
+                        try:
+                            data = json.loads(data_str)
+                            choices = data.get("choices", [])
+                            if not choices:
+                                continue
+                            delta = choices[0].get("delta", {})
+                            content = delta.get("content", "")
+                            if content:
+                                yield content
+                        except (json.JSONDecodeError, KeyError, IndexError):
+                            continue
+                # If stream consumed successfully, exit the generator
+                return
+
+            except urllib.error.HTTPError as e:
+                # Handle rate limit (429) with retry
+                if e.code == 429 and attempt < max_retries - 1:
+                    print(f"[GroqClient] Rate limit (429) encountered. Retrying in {retry_delay}s...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                    continue
+
+                error_body = ""
+                try:
+                    error_body = e.read().decode("utf-8")
+                except Exception:
+                    pass
+                raise RuntimeError(
+                    f"Groq API HTTP {e.code} error for agent '{agent_type}': {error_body}"
+                ) from e
+
+            except urllib.error.URLError as e:
+                # Handle connection issues with retry
+                if attempt < max_retries - 1:
+                    print(f"[GroqClient] Connection failed ({e.reason}). Retrying in {retry_delay}s...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                    continue
+                raise RuntimeError(
+                    f"Groq API connection failed for agent '{agent_type}': {e.reason}"
+                ) from e
+
+            except Exception as e:
+                raise RuntimeError(
+                    f"Unexpected error in Groq stream for agent '{agent_type}': {e}"
+                ) from e

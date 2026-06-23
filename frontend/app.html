@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueprintAI — Workspace</title>
+    <meta name="description" content="BlueprintAI Agent Workspace - Generate comprehensive, engineering-ready Product Requirements Documents.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/lumina-theme.css">
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <!-- Ambient background blobs -->
+    <div class="bg-glow-orb orb-1"></div>
+    <div class="bg-glow-orb orb-2"></div>
+    <div class="bg-glow-orb orb-3"></div>
+
+    <!-- Mobile Drawer Backdrop -->
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+    <div class="app-container">
+        
+        <!-- Left Sidebar (History Panel) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Session History</span>
+                </div>
+            </div>
+            
+            <!-- Collapsed Sidebar Indicator -->
+            <div class="sidebar-collapsed-indicator" id="sidebar-collapsed-indicator" title="Expand Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="13 17 18 12 13 7"></polyline>
+                    <polyline points="6 17 11 12 6 7"></polyline>
+                </svg>
+            </div>
+            
+            <div class="sidebar-history-list" id="history-list">
+                <!-- Rendered dynamically by app.js -->
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Panel -->
+        <main class="main-content">
+            
+            <!-- Top Navbar -->
+            <nav class="navbar">
+                <div class="nav-left">
+                    <button class="sidebar-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <a href="index.html" class="sidebar-logo" style="text-decoration: none; color: inherit;">
+                        <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+                            <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <rect x="18" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/>
+                            <rect x="2" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/>
+                            <rect x="18" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>BlueprintAI</span>
+                    </a>
+                </div>
+                
+                <!-- Unique Slogan Heading -->
+                <div class="navbar-slogan" style="font-size: 13px; color: var(--color-text-muted); font-family: var(--font-sans); font-weight: 500;">
+                    Collaborative multi-agent pipeline for engineering-grade specifications.
+                </div>
+                
+                <div class="navbar-actions">
+                    <button class="pipeline-toggle-btn" id="pipeline-toggle" title="Toggle Pipeline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </button>
+                    <a href="index.html" style="color: var(--color-on-surface); text-decoration: none; font-size: 12px; font-weight: 600; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.02); transition: var(--transition-smooth);" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
+                        Back to Home
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Dashboard Input Section -->
+            <section class="input-section">
+                <div class="input-container">
+                    <input type="text" id="prompt-input" class="prompt-input" placeholder="Describe your product idea (e.g. A decentralised car sharing app using smart contracts)...">
+                    
+                    <select id="industry-select" class="industry-select">
+                        <option value="SaaS / Web App">SaaS / Web App</option>
+                        <option value="Mobile App">Mobile App</option>
+                        <option value="Fintech / Web3">Fintech / Web3</option>
+                        <option value="Healthcare Tech">Healthcare Tech</option>
+                        <option value="E-commerce">E-commerce</option>
+                        <option value="Developer Tooling">Developer Tooling</option>
+                        <option value="AI / ML Platform">AI / ML Platform</option>
+                    </select>
+                    
+                    <button id="generate-btn" class="generate-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        Generate PRD
+                    </button>
+                </div>
+            </section>
+
+            <!-- Streaming & Viewing Workspace Panel -->
+            <section class="workspace-section">
+                
+                <!-- Status Banner -->
+                <div class="status-banner" id="status-banner" style="display: none;">
+                    <div class="status-text">
+                        <div class="status-spinner" id="status-spinner"></div>
+                        <span id="pipeline-status-text">Initializing multi-agent pipeline...</span>
+                    </div>
+                    <div class="export-actions" id="export-actions" style="display: none;">
+                        <button class="export-btn" id="export-md-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Export Markdown
+                        </button>
+                        <button class="export-btn" id="export-pdf-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                            Export PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs Container -->
+                <div class="tab-container">
+                    <button class="tab-btn active" data-target="panel-ba">Business Analyst</button>
+                    <button class="tab-btn" data-target="panel-pm">Product Manager</button>
+                    <button class="tab-btn" data-target="panel-qa">QA Critic</button>
+                    <button class="tab-btn" data-target="panel-final">Final Specification</button>
+                </div>
+
+                <!-- Workspace Panels -->
+                <div class="viewport-panel active markdown-body" id="panel-ba">
+                    <div class="welcome-card">
+                        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="8" height="8" rx="1.5"/>
+                            <rect x="14" y="2" width="8" height="8" rx="1.5" stroke-dasharray="3 1.5" opacity="0.5"/>
+                            <rect x="2" y="14" width="8" height="8" rx="1.5" stroke-dasharray="3 1.5" opacity="0.5"/>
+                            <rect x="14" y="14" width="8" height="8" rx="1.5"/>
+                            <line x1="10" y1="6" x2="14" y2="6" stroke-width="1.5" opacity="0.7"/>
+                            <line x1="6" y1="10" x2="6" y2="14" stroke-width="1.5" opacity="0.7"/>
+                            <line x1="18" y1="10" x2="18" y2="14" stroke-width="1.5" opacity="0.7"/>
+                            <line x1="10" y1="18" x2="14" y2="18" stroke-width="1.5" opacity="0.7"/>
+                        </svg>
+                        <h2>BlueprintAI Workspace</h2>
+                        <p>Enter your product idea above and click <strong>Generate PRD</strong> to launch the sequential multi-agent design pipeline.</p>
+                    </div>
+                </div>
+
+                <div class="viewport-panel markdown-body" id="panel-pm">
+                    <div style="color: var(--color-text-muted); text-align: center; padding: 48px 0;">
+                        No product requirements generated yet.
+                    </div>
+                </div>
+
+                <div class="viewport-panel markdown-body" id="panel-qa">
+                    <div style="color: var(--color-text-muted); text-align: center; padding: 48px 0;">
+                        No QA reports generated yet.
+                    </div>
+                </div>
+
+                <div class="viewport-panel markdown-body" id="panel-final">
+                    <div style="color: var(--color-text-muted); text-align: center; padding: 48px 0;">
+                        No final synthesized specification generated yet.
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- Right Agent Pipeline Sidebar -->
+        <aside class="pipeline-sidebar">
+            <div class="pipeline-sidebar-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <h3>Agent Pipeline</h3>
+            </div>
+            
+            <div class="pipeline-vertical-wrapper">
+                <div class="pipeline-vertical-line">
+                    <div class="pipeline-vertical-line-progress" id="pipeline-progress"></div>
+                </div>
+                
+                <!-- Business Analyst Node -->
+                <div class="pipeline-vertical-node ba" id="node-ba">
+                    <div class="node-icon-wrapper">
+                        <div class="node-pulse-ring"></div>
+                        <div class="node-icon-circle">BA</div>
+                    </div>
+                    <div class="node-text-content">
+                        <span class="node-title">Business Analyst</span>
+                        <span class="node-status" id="status-ba">Idle</span>
+                    </div>
+                </div>
+
+                <!-- Product Manager Node -->
+                <div class="pipeline-vertical-node pm" id="node-pm">
+                    <div class="node-icon-wrapper">
+                        <div class="node-pulse-ring"></div>
+                        <div class="node-icon-circle">PM</div>
+                    </div>
+                    <div class="node-text-content">
+                        <span class="node-title">Product Manager</span>
+                        <span class="node-status" id="status-pm">Idle</span>
+                    </div>
+                </div>
+
+                <!-- QA Critic Node -->
+                <div class="pipeline-vertical-node qa" id="node-qa">
+                    <div class="node-icon-wrapper">
+                        <div class="node-pulse-ring"></div>
+                        <div class="node-icon-circle">QA</div>
+                    </div>
+                    <div class="node-text-content">
+                        <span class="node-title">QA Critic</span>
+                        <span class="node-status" id="status-qa">Idle</span>
+                    </div>
+                </div>
+
+                <!-- Synthesis CPO Node -->
+                <div class="pipeline-vertical-node syn" id="node-syn">
+                    <div class="node-icon-wrapper">
+                        <div class="node-pulse-ring"></div>
+                        <div class="node-icon-circle">SYN</div>
+                    </div>
+                    <div class="node-text-content">
+                        <span class="node-title">Synthesis CPO</span>
+                        <span class="node-status" id="status-syn">Idle</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Application scripts -->
+    <script src="js/agent-visualizer.js"></script>
+    <script src="js/markdown-renderer.js"></script>
+    <script src="js/export-handler.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Script to handle mobile drawer toggling and backdrop dismissals -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const pipelineSidebar = document.querySelector('.pipeline-sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const pipelineToggle = document.getElementById('pipeline-toggle');
+            const backdrop = document.getElementById('drawer-backdrop');
+
+            function updateBackdrop() {
+                const isMobile = window.innerWidth <= 992;
+                if (!isMobile) {
+                    if (backdrop) backdrop.classList.remove('active');
+                    return;
+                }
+                const isLeftOpen = sidebar && !sidebar.classList.contains('collapsed');
+                const isRightOpen = pipelineSidebar && pipelineSidebar.classList.contains('open');
+                if ((isLeftOpen || isRightOpen) && backdrop) {
+                    backdrop.classList.add('active');
+                } else if (backdrop) {
+                    backdrop.classList.remove('active');
+                }
+            }
+
+            // Default collapsed on mobile
+            if (window.innerWidth <= 992 && sidebar) {
+                sidebar.classList.add('collapsed');
+            }
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    setTimeout(updateBackdrop, 50);
+                });
+            }
+
+            if (pipelineToggle && pipelineSidebar) {
+                pipelineToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    pipelineSidebar.classList.toggle('open');
+                    updateBackdrop();
+                });
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.add('collapsed');
+                    if (pipelineSidebar) pipelineSidebar.classList.remove('open');
+                    updateBackdrop();
+                });
+            }
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 992) {
+                    if (pipelineSidebar) pipelineSidebar.classList.remove('open');
+                    updateBackdrop();
+                } else {
+                    if (sidebar && !sidebar.classList.contains('collapsed')) {
+                        sidebar.classList.add('collapsed');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -29,6 +29,33 @@ class OllamaClient:
             pass
         return False
 
+    def get_best_model(self) -> str:
+        """
+        Queries Ollama tags and returns the best model available.
+        Prioritizes 'qwen', then 'llama', then the default model.
+        """
+        try:
+            url = f"{self.base_url}/api/tags"
+            with urllib.request.urlopen(url, timeout=1.0) as response:
+                if response.status == 200:
+                    data = json.loads(response.read().decode('utf-8'))
+                    models = [m.get("name") for m in data.get("models", [])]
+                    
+                    # Prioritize Qwen (since user mentioned downloading it)
+                    for m in models:
+                        if "qwen" in m.lower():
+                            return m
+                    # Then Llama
+                    for m in models:
+                        if "llama" in m.lower():
+                            return m
+                    
+                    if models:
+                        return models[0]
+        except Exception:
+            pass
+        return self.default_model
+
     def generate_stream(
         self,
         prompt: str,

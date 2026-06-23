@@ -35,15 +35,15 @@ def load_env():
 load_env()
 
 # Import local components (now dependency-free)
-from backend.models.groq_client import GroqClient
+from backend.models.model_provider import ModelProvider
 from backend.memory.conversation_store import ConversationStore
 from backend.agents.business_analyst import BusinessAnalyst
 from backend.agents.product_manager import ProductManager
 from backend.agents.qa_critic import QACritic
 from backend.agents.synthesis import Synthesis
 
-# Initialize singleton instances
-groq_client = GroqClient()
+# Initialize singleton instances (uses ModelProvider for hybrid online/offline orchestration)
+groq_client = ModelProvider()
 store = ConversationStore()
 
 class BlueprintAIRequestHandler(BaseHTTPRequestHandler):
