@@ -29,10 +29,17 @@ def load_env():
                             val = val[1:-1]
                         elif val.startswith("'") and val.endswith("'"):
                             val = val[1:-1]
-                        os.environ[key] = val
+                        if key not in os.environ:
+                            os.environ[key] = val
 
 # Load environment
 load_env()
+# Ensure system variables (like Docker overridden ones) have precedence
+if "PORT" in os.environ:
+    pass
+else:
+    # If not overridden by Docker, load_env already loaded from .env
+    pass
 
 # Import local components (now dependency-free)
 from backend.models.model_provider import ModelProvider
