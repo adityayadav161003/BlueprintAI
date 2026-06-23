@@ -1,3 +1,13 @@
+---
+title: BlueprintAI
+emoji: 🏗️
+colorFrom: gray
+colorTo: black
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # BlueprintAI — Premium Multi-Agent PRD Generator
 
 BlueprintAI is a state-of-the-art, premium AI-powered software design tool that automates the generation of highly detailed Product Requirements Documents (PRDs). Built specifically for developers, product managers, and software architects, BlueprintAI simulates a full-cycle product design team using a multi-agent pipeline. 
