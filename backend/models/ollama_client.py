@@ -295,31 +295,63 @@ class OllamaClient:
         return f"""# Final Product Requirements Document: {idea}
 
 ## Executive Summary
-- **Vision**: Establish the premier automation platform for {idea} within the {industry} space, utilizing an advanced multi-agent orchestrator.
-- **Target Audience**: Mid-market operations leads and freelance professionals looking to save 5+ hours weekly by automating administrative tasks.
-- **Strategic Impact**: Eliminate fragmented tool ecosystems and provide a single, offline-first dashboard that operates with zero API costs using local AI models.
+- **Vision**: Establish the premier platform for {idea} within the {industry} space, setting the standard for quality, trust, and accessibility.
+- **Target Audience**: Diverse user base spanning multiple demographics, income levels, and geographic markets.
+- **Strategic Impact**: Eliminate friction and fragmentation in the current market, serving users from tech-savvy professionals to first-time digital buyers.
 
 ---
 
-## 1. Detailed User Personas
+## 1. User Personas — Diverse, Research-Backed Profiles
 
-### Persona 1: Alex the High-Performer
-- **Profile**: 32 years old, Lead Project Coordinator.
-- **Goals**: Automate status reports, eliminate manual tracking, save 5+ hours weekly.
-- **Frustrations**: Tired of writing updates, copy-pasting spreadsheet data.
-- **Tech Comfort**: High. Uses multiple SaaS tools daily.
+### Persona 1: Rahul Sharma — Primary End User (Urban Millennial)
+- **Demographics**: 27 years old, Software Engineer, Bengaluru. Mid-income (~₹10L/yr). High tech literacy.
+- **Daily Workflow**: Browses Facebook Marketplace and OLX for deals; frustrated by lack of quality filters and scammy listings.
+- **Primary Pain Points**: Cannot verify laptop condition remotely; gets lowballed when selling; no price benchmarking tool.
+- **Goals**: Buy a certified refurbished laptop under ₹30K with 6-month warranty. Sell his old one at fair market value within 2 weeks.
+- **Technology Comfort**: High — uses mobile-first, prefers app over web, uses UPI and Razorpay.
+- **Budget Authority**: Buys independently. Budget-flexible if quality is guaranteed.
+- **Representative Quote**: *"I just want to know the laptop is actually working before I show up with cash."*
+- **Product Usage Pattern**: Browses 3x/week, compares 5+ listings before buying.
 
-### Persona 2: Sam the Operational Manager
-- **Profile**: 45 years old, Operations Lead.
-- **Goals**: Streamline team workflows, view real-time pipeline performance metrics.
-- **Frustrations**: Fragmented communication, out-of-date status reporting.
-- **Tech Comfort**: Medium. Prefers simple, consolidated dashboards.
+### Persona 2: Sunita Devi — Older / Lower-Tech User (Tier-2 City Parent)
+- **Demographics**: 54 years old, homemaker, Lucknow. Lower-middle income. Low tech literacy.
+- **Daily Workflow**: Relies on her son to help purchase things online. Needs a laptop for her daughter's college coursework.
+- **Primary Pain Points**: Overwhelmed by too many options. Fears online fraud. Cannot judge specs.
+- **Goals**: Buy a reliable, affordable laptop for college use — under ₹20K, simple UI.
+- **Technology Comfort**: Low — uses WhatsApp on Android, struggles with complex web flows.
+- **Budget Authority**: Household decision requires spouse approval. Extremely price-sensitive.
+- **Representative Quote**: *"Bhai, ek baar bata do konsa sahi rahega — aur fraud nahi hoga na?"*
+- **Product Usage Pattern**: One-time purchase, guided by recommendations. Needs WhatsApp/phone support.
 
-### Persona 3: Jordan the Independent Contractor
-- **Profile**: 28 years old, Freelance Developer.
-- **Goals**: Manage multiple clients, create automated specs without overhead.
-- **Frustrations**: Unclear scopes from clients, excessive time spent on administrative overhead.
-- **Tech Comfort**: Very High. Active terminal and API user.
+### Persona 3: Priya Kapoor — Budget-Constrained Student
+- **Demographics**: 20 years old, undergraduate student, Pune. Income: ₹0 (dependent). Very high tech literacy.
+- **Daily Workflow**: Browses Reddit, YouTube, Quora for laptop recommendations. Tracks prices obsessively.
+- **Primary Pain Points**: Budget strictly ₹15K. Worried about hidden defects. No return policy on most used platforms.
+- **Goals**: Find a laptop with decent specs for coding and design coursework, with at least 3-month warranty.
+- **Technology Comfort**: Very High — uses Discord, GitHub, Reddit daily. Web + mobile.
+- **Budget Authority**: Dependent on parents; every rupee counts. Needs EMI option.
+- **Representative Quote**: *"I've been tracking OLX for 3 weeks — every good deal disappears in an hour."*
+- **Product Usage Pattern**: Daily browsing, price alerts enabled, impulse purchases on flash deals.
+
+### Persona 4: Vikram Joshi — Power User / Reseller (High-Frequency)
+- **Demographics**: 35 years old, laptop reseller business owner, Delhi. High income. Very high tech literacy.
+- **Daily Workflow**: Sources 15-20 laptops/month, refurbishes them, resells. Currently uses WhatsApp groups and Excel for inventory.
+- **Primary Pain Points**: No bulk listing tool. Difficult to price competitively. Chargebacks and scam buyers waste time.
+- **Goals**: List 20+ devices at once, track sales pipeline, get verified seller badge to command premium pricing.
+- **Technology Comfort**: Very High — uses Shopify, Excel, WhatsApp Business.
+- **Budget Authority**: Full authority. Highest LTV customer — B2B tier.
+- **Representative Quote**: *"I need a platform that treats sellers like a business, not a random OLX poster."*
+- **Product Usage Pattern**: Daily logins, bulk operations, analytics dashboard user.
+
+### Persona 5: Deepa Nair — Platform Admin / Operations Manager
+- **Demographics**: 31 years old, Operations Manager (internal role at the company), Mumbai. High income.
+- **Daily Workflow**: Reviews seller listings for quality compliance, handles dispute resolution, monitors KPIs.
+- **Primary Pain Points**: No centralized admin tool — currently uses spreadsheets. Manual fraud review.
+- **Goals**: Review 50+ new listings per day, flag suspicious sellers, generate weekly reports, manage refund queue.
+- **Technology Comfort**: High — advanced Excel, Notion, internal dashboards.
+- **Budget Authority**: N/A (internal user — not a paying customer).
+- **Representative Quote**: *"I'm spending 3 hours every morning just triaging listings that should be auto-filtered."*
+- **Product Usage Pattern**: Full-day admin dashboard user. Heavy use of bulk actions and reporting.
 
 ---
 

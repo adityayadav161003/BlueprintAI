@@ -8,182 +8,82 @@ class QACritic(BaseAgent):
 
     def run(self, groq_client, pm_output: str, user_idea: str, industry: str) -> Generator[str, None, None]:
         """
-        Executes the QA Critic agent — systematically identifies every gap, risk, and ambiguity in the PRD draft.
+        Executes the QA Critic agent — Sections 10-12 of the PRD.
         """
-        system_prompt = """You are the most feared and respected QA Lead in Silicon Valley.
+        system_prompt = f"""You are a senior QA Engineer and Risk Analyst reviewing requirements for: "{user_idea}"
 
-You have 15 years of experience doing pre-launch audits at top consulting firms and product companies. You have personally prevented over $200M in failed product launches. Founders dread your reviews — but they always thank you afterward.
+THE MOST CRITICAL RULE:
+Every risk, assumption, and test case you identify must be specific to "{user_idea}" and its real-world context.
 
-YOUR JOB: Find everything wrong, missing, ambiguous, or dangerous in the PRD before a single line of code is written.
+ABSOLUTE PROHIBITIONS:
+- Never list SSE timeout, ChromaDB, or Ollama as risks — those are internal tool risks, not product risks
+- Never list generic software project risks that apply to every product equally
+- Never invent fake competitor names
+- A dating app has trust and safety risks. A used laptop marketplace has fraud and counterfeit risks. A food delivery app has logistics risks. Write risks specific to THIS product category.
 
-IRON RULES:
-1. You are NOT here to praise the PRD. You are here to make it airtight.
-2. Every gap you identify MUST have a concrete fix recommendation (not vague advice).
-3. You must specifically audit for: compliance/regulatory gaps, missing user roles, incomplete workflows, shallow monetization, and unvalidated assumptions.
-4. Score every major section 1-10 with explicit justification.
-5. Flag any requirement that two developers would implement differently. That's an ambiguity — and ambiguities cost weeks.
-6. If the PRD is missing entire sections, call them out explicitly and explain what's missing.
-7. Surface security vulnerabilities implied by the architecture before they're coded in.
-8. Identify every assumption that hasn't been validated by real users or data.
-9. Be direct and specific. Vague criticism like "needs more detail" is unacceptable — say EXACTLY what detail is missing.
-10. Your final blocking issues list is the MINIMUM bar that must be met before engineering begins."""
+QUALITY GATE: For every risk, ask: "Could this exact risk appear unchanged in a PRD for a completely different type of product?" If yes, make it specific to {user_idea}."""
 
-        prompt = f"""Perform a rigorous QA audit of the following Product Requirements Document.
+        prompt = f"""You are a senior QA Engineer and Risk Analyst. Review the PM output and produce Sections 10–12 for:
 
-PRODUCT IDEA: {user_idea}
+PRODUCT: {user_idea}
 INDUSTRY: {industry}
 
-PRD DRAFT TO REVIEW:
-{pm_output[:4000] if len(pm_output) > 4000 else pm_output}
-
-Produce a comprehensive QA Critic Report in markdown. Be brutally honest. Every issue must have a recommended fix.
+PM OUTPUT TO REVIEW:
+{pm_output[:3500] if len(pm_output) > 3500 else pm_output}
 
 ---
 
-# QA Critic Report: PRD Audit
-## Product: {user_idea}
+## Section 10: Risk Register
+
+Identify 5–8 risks that are SPECIFIC to "{user_idea}" and its operating context.
+
+| Risk | Category | Likelihood (H/M/L) | Impact (H/M/L) | Mitigation Strategy |
+|------|----------|--------------------|----------------|---------------------|
+
+Risk categories to consider for this specific product:
+- Market risks (competition timing, adoption barriers specific to this product)
+- Technical risks (specific to what this product needs to do — real-time features, data sensitivity, scale)
+- Legal/compliance risks (specific to this product's domain and geography)
+- Operational/safety risks (trust, fraud, safety concerns specific to this product type)
+- Financial risks (pricing model viability, unit economics specific to this business model)
+
+Every risk must be something a founder building "{user_idea}" would genuinely worry about. No generic project management risks.
 
 ---
 
-## Overall Assessment
-- **Overall PRD Quality Score**: X/10
-- **Recommendation**: [APPROVE / APPROVE WITH MANDATORY CHANGES / REJECT AND REWRITE]
-- **Critical Issues Found**: [count]
-- **Summary**: (2-3 sentences on the biggest problems)
+## Section 11: Open Questions & Assumptions
+
+List 5–8 things currently unknown or assumed that could significantly affect the direction of "{user_idea}".
+
+Format each as:
+**[Assumption or Question]:** [Why it matters for this product specifically] → [How to resolve it — specific action, not "do research"]
+
+Cover areas relevant to this product:
+- User behavior assumptions that need validation with real users
+- Business model decisions not yet finalized
+- Regulatory or legal questions specific to this product's market
+- Technical feasibility unknowns for the key features
+- Partnership or integration dependencies this product relies on
+- Safety or trust mechanisms that need further design
 
 ---
 
-## Section-by-Section Ratings
-| Section | Score | Critical Issues Found |
-|---------|-------|-----------------------|
-| Executive Summary | X/10 | ... |
-| Role Definition | X/10 | ... |
-| Business Workflow | X/10 | ... |
-| User Personas | X/10 | ... |
-| User Stories (MoSCoW) | X/10 | ... |
-| Functional Requirements | X/10 | ... |
-| Admin Dashboard Requirements | X/10 | ... |
-| Compliance & Regulatory | X/10 | ... |
-| Non-Functional Requirements | X/10 | ... |
-| UI/UX Requirements | X/10 | ... |
-| Data Model | X/10 | ... |
+## Section 12: QA & Testing Strategy
 
----
+Outline the testing approach for the core user flows of "{user_idea}":
 
-## 🔴 Critical Gaps — Must Fix Before Development Begins
-These issues will cause the product to fail legally, technically, or commercially if not addressed.
+**The 3 Most Critical End-to-End Flows to Test:**
+For each flow, describe what success looks like and what a failure looks like. Make these specific to the actual user flows of this product.
 
-### Gap 1: [Title]
-- **Problem**: What is missing or wrong (be specific, quote the PRD text if applicable)
-- **Consequence**: What failure scenario will occur if this is not fixed
-- **Required Fix**: Exact addition or change needed in the PRD
+1. [Flow name] — [What must work perfectly / What failure means for the user]
+2. [Flow name] — [What must work perfectly / What failure means for the user]
+3. [Flow name] — [What must work perfectly / What failure means for the user]
 
-### Gap 2: [Title]
-[...repeat for every critical gap found...]
+**Dangerous Edge Cases & Failure Scenarios:**
+List the edge cases and failure modes that are most harmful specifically for "{user_idea}". Think about: what happens when the core value exchange breaks down, data integrity issues, concurrent user conflicts, payment failures, and any safety scenarios relevant to this product type.
 
-Specifically audit for and report on:
-- Are ALL user roles defined? (customer, admin, operator, compliance officer, support, etc.)
-- Is the complete business workflow documented end-to-end?
-- Are compliance/regulatory requirements listed and treated as functional requirements?
-- Is there a payment failure and refund handling flow?
-- Are data deletion / GDPR requirements present?
-- Is the admin dashboard fully specified?
-- Are notification triggers comprehensive?
-- Are error states defined for every major operation?
-
----
-
-## 🟡 Logical Inconsistencies
-Requirements that contradict each other or create impossible situations.
-
-| Inconsistency | Section A Claim | Section B Claim | Resolution |
-|--------------|-----------------|-----------------|------------|
-
----
-
-## 🟠 Technical & Security Risks
-### Risk 1: [Title]
-- **Risk**: The specific technical or security problem
-- **Root Cause**: What in the PRD implies this risk
-- **Likelihood**: High / Medium / Low
-- **Impact**: High / Medium / Low (data breach? downtime? data loss?)
-- **Mitigation**: Specific technical approach (not vague advice)
-
-Specifically check for:
-- Authentication vulnerabilities (session fixation, token handling, brute force)
-- Data privacy risks (PII exposure, logging sensitive data)
-- Third-party API failures (what happens if payment gateway goes down?)
-- Race conditions (concurrent users performing conflicting operations)
-- Scalability bottlenecks implied by the current design
-
----
-
-## 🟣 Missing Requirements (Complete Omissions)
-Requirements that are entirely absent from the PRD:
-
-| Missing Requirement | Category | Why It's Critical | Recommended Addition |
-|--------------------|----------|-------------------|---------------------|
-
-Check for these common omissions:
-- Onboarding / first-run experience for new users
-- Account recovery / support escalation flows
-- Terms of Service / Privacy Policy acceptance
-- Email/phone verification
-- Data export feature (GDPR/CCPA)
-- Activity logs / audit trails for compliance
-- System status page / maintenance mode
-- Rate limiting and abuse prevention
-- Search and filter functionality (if applicable)
-- Multi-language / internationalization (if applicable)
-
----
-
-## 🔵 Ambiguities — Requirements That Will Be Implemented Differently By Different Engineers
-
-| Ambiguous Requirement | Interpretation A | Interpretation B | Required Clarification |
-|----------------------|------------------|------------------|------------------------|
-
----
-
-## 🟢 Monetization Completeness Audit
-Review the revenue model for:
-- Is the pricing model specific (price points, not just "freemium")?
-- Is the payment flow fully specified (success, failure, retry, refund)?
-- Is the free-to-paid conversion path defined?
-- Are subscription management features specified (upgrade, downgrade, cancel)?
-- Are invoice/receipt requirements defined?
-
-Score the monetization section: X/10 with specific gaps listed.
-
----
-
-## ⚖️ Compliance & Regulatory Audit
-For {industry}, the following must be present in the PRD. Flag each as Present / Missing / Partial:
-
-| Requirement | Status | Specific Gap |
-|-------------|--------|--------------|
-[List all relevant regulations for this industry — HIPAA, GDPR, CCPA, PCI-DSS, FDA, KYC/AML, COPPA, etc. as applicable]
-
----
-
-## 💡 Enhancement Recommendations
-5 specific improvements that would elevate this PRD from good to exceptional:
-1. [Specific enhancement with example text]
-2. ...
-
----
-
-## ⛔ Blocking Issues for Synthesis Agent
-These MUST be resolved before the final PRD is produced. The Synthesis agent must address all of these:
-
-1. [Blocking issue — specific, actionable]
-2. [Blocking issue — specific, actionable]
-3. [Blocking issue — specific, actionable]
-[Add more if needed — do not artificially limit to 3 if there are more]
-
----
-
-Every issue you raised must have a concrete fix. Vague criticism is unacceptable."""
+**User Acceptance Testing Approach:**
+How should UAT be conducted for this specific product? Who should the beta testers be, what scenarios must they complete, and what constitutes a passing result?"""
 
         for chunk in groq_client.generate_stream(
             prompt=prompt,

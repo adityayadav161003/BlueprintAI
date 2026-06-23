@@ -8,248 +8,113 @@ class ProductManager(BaseAgent):
 
     def run(self, groq_client, ba_output: str, user_idea: str, industry: str) -> Generator[str, None, None]:
         """
-        Executes the Product Manager agent to generate a complete, engineer-ready PRD draft.
+        Executes the Product Manager agent — Sections 6-9 of the PRD.
         """
-        system_prompt = """You are a Principal Product Manager with 12 years of experience at Google, Stripe, and Airbnb.
+        system_prompt = f"""You are a senior Product Manager at a well-funded startup. You will translate user needs into precise product requirements for: "{user_idea}"
 
-You have shipped 0-to-1 products used by millions. Your PRDs are legendary because:
-- Engineers implement them without a single clarification meeting
-- QA teams write test cases directly from your acceptance criteria
-- Designers wireframe from your UX specs without guessing
-- Investors understand the product vision in 2 minutes
+THE MOST CRITICAL RULE:
+Everything you write must describe features and requirements of "{user_idea}" ONLY.
 
-YOUR MANDATORY STANDARDS:
-1. NEVER write a functional requirement without explicit acceptance criteria (3+ criteria per requirement).
-2. ALWAYS define ALL system roles — not just end-users. Admins, operators, compliance officers, support agents matter.
-3. ALWAYS include the complete business workflow — the end-to-end transaction or value chain.
-4. ALWAYS define error states, edge cases, and failure scenarios for every major feature.
-5. ALWAYS include compliance and regulatory requirements as first-class functional requirements.
-6. ALWAYS define notification requirements (what triggers them, who receives them, what channel).
-7. ALWAYS include data model hints — what entities need to be stored in the database.
-8. ALWAYS define the admin dashboard requirements separately from the customer-facing product.
-9. MoSCoW prioritization must reflect what can realistically ship in 12 weeks with a 3-person team.
-10. Every user story must follow: "As a [specific role], I want to [specific action], so that [measurable outcome]." """
+ABSOLUTE PROHIBITIONS:
+- Never write user stories that could apply to a different product
+- Never describe ChromaDB, SSE streaming, Ollama, vector databases, or any AI pipeline infrastructure as features of the user's product
+- Never use placeholder competitor names
+- Never write functional requirements for a generic SaaS template — write them for THIS specific product
+- Never include stories like "generate a structured outline" unless the product literally is a document generator
 
-        prompt = f"""You are drafting a complete Product Requirements Document (PRD) draft.
+QUALITY GATE: For every user story and functional requirement, ask: "Is this an action a real user of {user_idea} would actually perform?" If no, delete it."""
 
-PRODUCT IDEA: {user_idea}
+        prompt = f"""You are a senior Product Manager. You have received business context from the BA agent. Now translate user needs into precise product requirements for:
+
+PRODUCT: {user_idea}
 INDUSTRY: {industry}
 
-BUSINESS ANALYSIS CONTEXT (use this to inform your requirements):
-{ba_output[:2800] if len(ba_output) > 2800 else ba_output}
+BUSINESS CONTEXT FROM BA AGENT:
+{ba_output[:3000] if len(ba_output) > 3000 else ba_output}
 
-Produce a thorough PRD draft in markdown. Do NOT skip any section. Engineers will read this document on Day 1.
-
----
-
-# Product Requirements Document — Draft
-## Product: {user_idea}
-**Version:** 0.9 (Draft) | **Author:** Product Manager | **Status:** Pending QA Review
+Produce the following sections. Everything must describe features of "{user_idea}" only.
 
 ---
 
-## Executive Summary
-- **Product Vision**: (one sentence that captures why this exists)
-- **Core Problem**: (the specific pain point with quantification from BA analysis)
-- **Our Solution**: (what we build and its unique mechanism)
-- **MVP Scope**: (what ships in v1.0 — be explicit about what is IN and OUT)
-- **Target Launch**: (realistic timeline assuming 3-5 person team)
-- **Success in 6 Months**: (one measurable outcome)
+## Section 6: Prioritized User Stories
+
+Write 10–15 user stories using the format:
+"As a [specific persona type from the BA analysis], I want to [perform a specific action in {user_idea}], so that [specific outcome or benefit]."
+
+**Must-Have (core loop — without these the product doesn't work):**
+At least 5 stories covering the primary user flow end-to-end in {user_idea}.
+
+**Should-Have (significantly improves experience):**
+At least 3 stories for important but non-blocking features.
+
+**Could-Have (nice to have, defer if needed):**
+2–3 stories for enhancements.
+
+For each story, include Acceptance Criteria:
+- Given [specific context in {user_idea}], When [specific user action], Then [specific system behavior or outcome]
+
+CRITICAL: Every story must describe a real action inside {user_idea}. Never reuse generic stories that could apply to any app.
 
 ---
 
-## 1. All System Roles & Permissions
-Define EVERY role that will interact with the system — customers AND internal users:
-| Role | Description | Key Capabilities | Access Level |
-|------|-------------|-----------------|--------------|
-Include at minimum: [primary customer role], [admin role], [operator/support role]. Add industry-specific roles (e.g., Pharmacist, Driver, Compliance Officer, Instructor, etc.)
+## Section 7: Functional Requirements
+
+List 10–15 functional requirements as a table:
+
+| ID | Feature Area | Description | Acceptance Criteria | Priority |
+|----|-------------|-------------|---------------------|----------|
+
+Requirements must cover the areas relevant to {user_idea}:
+- Core product actions (what users primarily DO in this product day to day)
+- Data management (what information is stored, retrieved, updated)
+- User authentication and account management
+- Search, filter, or discovery features (if applicable to this product)
+- Notifications or communication features (if applicable)
+- Transaction or payment flows (if applicable)
+- Moderation or admin capabilities (if applicable)
+
+CRITICAL: Every requirement must describe a feature of "{user_idea}". Do NOT describe the AI pipeline, SSE streaming, ChromaDB, Ollama, or any internal tool infrastructure. Those are implementation details of the generator, not the product.
 
 ---
 
-## 2. End-to-End Business Workflow
-Define the complete transaction/value chain for the core product flow:
-```
-Step 1: [First user action]
-    → System response: [what happens in the backend]
-Step 2: [Next user action]
-    → System response: [validation, routing, storage]
-...continue until the value is fully delivered...
-Final Step: [Confirmation / delivery / completion]
-    → Post-completion: [notifications, records, follow-ups]
-```
-This is the backbone of your data model and API design.
+## Section 8: Non-Functional Requirements
+
+Cover all of the following for {user_idea} specifically:
+
+**Performance:** What are the load time and response time requirements? How many concurrent users should the MVP support? Are there any real-time requirements specific to this product type?
+
+**Scalability:** What is the realistic user growth trajectory for this product? What data volumes should the system handle at launch vs. 6 months vs. 12 months?
+
+**Security:** What authentication method is appropriate? What sensitive data does this product handle (location, payment, personal identity, messages, etc.) and how must it be protected?
+
+**Compliance:** What laws and regulations apply to {user_idea} in its target geography? Consider: data privacy laws (GDPR, IT Act, CCPA), industry-specific regulations, age verification requirements, financial regulations (if payments are involved).
+
+**Availability:** What uptime SLA is required? Are there peak usage patterns to plan for?
+
+**Accessibility:** What WCAG level is targeted? What device and browser support is required at launch?
 
 ---
 
-## 3. User Personas (3 Complete Profiles)
-For each persona:
-### Persona [N]: [Name, Role]
-- **Demographics**: age, location, job title, company size
-- **Daily Workflow**: how they currently work (before your product)
-- **Primary Pain Points**: what wastes their time or money
-- **Goals**: what success looks like for them
-- **Technology Comfort**: which tools they already use
-- **Budget Authority**: can they sign off on payment themselves?
-- **Representative Quote**: a realistic quote expressing their frustration
-- **How They'll Use the Product**: typical weekly usage pattern
+## Section 9: Success Metrics & KPIs
 
----
+Define measurable success for {user_idea} across all five stages. Every metric must be relevant to this specific product type.
 
-## 4. User Stories — MoSCoW Prioritization
+**Acquisition:** How do we know users are discovering and signing up?
+Include: sign-up conversion rate, primary acquisition channel, CAC target
 
-### 🔴 Must Have (MVP — Sprint 1-4, ship in ≤ 12 weeks)
-For each story:
-**[US-XXX]** As a [role], I want to [action], so that [measurable outcome].
-- **Priority**: Must Have
-- **Story Points**: [1-13 Fibonacci]
-- **Acceptance Criteria**:
-  - Given [context], when [action], then [result]
-  - Given [error context], when [action], then [error state shown]
-  - [Performance criterion if applicable]
+**Activation:** How do we know users completed their first meaningful action in {user_idea}?
+Define what "activated" means specifically for this product (e.g., first match made, first listing posted, first purchase, first date booked) and the target rate.
 
-Include stories for: onboarding, core value delivery, payment/monetization, admin management, notifications, error recovery.
-Aim for 10-12 Must Have stories.
+**Retention:** How do we know users come back?
+Include: D7 retention target, D30 retention target, WAU/MAU ratio target
 
-### 🟡 Should Have (Sprint 5-6, second iteration)
-5-6 stories with brief acceptance criteria.
+**Revenue:** How does {user_idea} make money and what are the Month 3 and Month 12 targets?
+Include: primary revenue model, price point, MRR or GMV target
 
-### 🟢 Could Have (Post-MVP, 3+ months)
-3-4 stories with one-line description.
+**Satisfaction:** How do we measure user happiness?
+Include: NPS target, app store rating target, primary feedback channel
 
-### ⚫ Won't Have (Explicitly OUT of MVP scope)
-3-5 items with justification for exclusion.
-
----
-
-## 5. Functional Requirements
-
-Complete table. Every row must have full acceptance criteria.
-
-| ID | Feature | Role | Description | Acceptance Criteria | Priority | Dependencies |
-|----|---------|------|-------------|---------------------|----------|--------------|
-
-Organize into these groups (add product-specific features within each group):
-
-### 5.1 Authentication & Account Management
-- User registration (email, social, phone)
-- Login / logout
-- Password reset
-- Profile management
-- Account deletion (GDPR right to erasure)
-- Role-based access control
-
-### 5.2 Core Product Features
-[Write all product-specific features here — this is the heart of the product]
-Be exhaustive. Include the complete workflow from section 2 as individual requirements.
-
-### 5.3 Admin & Operator Dashboard
-- User management (view, suspend, delete accounts)
-- Content/order/transaction management
-- Analytics and reporting views
-- System health monitoring
-- Configuration management
-
-### 5.4 Payment & Billing
-- Payment method collection (card, UPI, etc.)
-- Payment processing
-- Invoice generation
-- Refund handling
-- Payment failure retry
-
-### 5.5 Notifications & Communications
-| Trigger Event | Recipients | Channel (Email/SMS/Push) | Template Description |
-List ALL notification triggers explicitly.
-
-### 5.6 Compliance & Regulatory Requirements
-[Industry-specific — e.g., for healthcare: prescription verification, pharmacist approval workflow, controlled substances; for fintech: KYC, AML; for edtech: COPPA]
-- Each compliance requirement must be a first-class functional requirement with acceptance criteria.
-
-### 5.7 Data Management & Privacy
-- Data collection scope
-- Data retention policy (how long is data kept?)
-- Data deletion on account closure
-- Export of personal data (GDPR portability)
-- Audit logging requirements
-
----
-
-## 6. Non-Functional Requirements
-
-### 6.1 Performance SLAs
-| Metric | Requirement | Measurement |
-|--------|-------------|-------------|
-| API response time (p50) | < 200ms | Datadog APM |
-| API response time (p95) | < 500ms | Datadog APM |
-| Page load time | < 2s (LCP) | Lighthouse |
-| Uptime SLA | 99.9% monthly | Status page |
-| Database query time (p95) | < 100ms | Query logs |
-
-### 6.2 Security Requirements
-- Authentication: [JWT / OAuth2 / Session-based — specify]
-- Password policy: minimum requirements
-- Data encryption at rest: [specify algorithm]
-- Data encryption in transit: TLS 1.2+
-- Session management: timeout rules
-- Rate limiting: requests per minute per IP
-- Input validation: XSS, SQL injection, CSRF protection
-- Secrets management: environment variables, no hardcoded keys
-
-### 6.3 Scalability Plan
-| Phase | Users | Architecture | Database | Infra Cost/mo |
-|-------|-------|-------------|----------|---------------|
-| MVP | 0–500 | Monolith | Single DB | ~$50-100 |
-| Growth | 500–10K | Modular monolith | Read replicas | ~$200-500 |
-| Scale | 10K+ | Microservices (selective) | Sharding/caching | ~$1,000+ |
-
-### 6.4 Accessibility
-- WCAG 2.1 Level AA compliance
-- Screen reader support (ARIA labels)
-- Keyboard navigation for all interactive elements
-- Minimum contrast ratio: 4.5:1
-
----
-
-## 7. UI/UX Requirements
-
-### 7.1 Screen Inventory
-| Screen Name | Primary Role | Purpose | Entry Point | Exit Points |
-|-------------|-------------|---------|-------------|-------------|
-List every screen in the application.
-
-### 7.2 Critical User Flows
-Describe the 3 most important user journeys step-by-step (numbered steps).
-
-### 7.3 Design Principles
-- 3-5 design principles specific to this product
-- Component library recommendation (e.g., shadcn/ui, Material UI, Ant Design)
-- Responsive breakpoints: mobile (320px), tablet (768px), desktop (1280px)
-
----
-
-## 8. Technical Constraints & Assumptions
-- **Platform targets**: web-first, then iOS/Android (or native-first — specify)
-- **Browser support**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **Third-party APIs**: list any external services (payment gateway, maps, SMS, etc.)
-- **Known limitations**: anything that constrains technical choices
-- **Assumptions**: decisions made without full validation (flag these for the QA agent)
-
----
-
-## 9. Data Entities (Key Database Tables)
-Hint to engineers what data needs to be persisted:
-| Entity | Purpose | Key Fields | Relationships |
-|--------|---------|-----------|---------------|
-Include all entities that appear in the business workflow.
-
----
-
-## 10. MVP Exclusions (Explicit Out-of-Scope List)
-| Feature | Why Excluded from MVP | When to Consider |
-|---------|----------------------|-----------------|
-
----
-
-This draft is ready for QA Critic review."""
+All metrics must have specific target numbers — not "X%" or "TBD"."""
 
         for chunk in groq_client.generate_stream(
             prompt=prompt,

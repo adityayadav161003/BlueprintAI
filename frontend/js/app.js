@@ -158,10 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
             activeGeneration.final = data.final;
             
             // Render all panels
-            panels['panel-ba'].innerHTML = renderer.renderBAJson(data.ba);
-            panels['panel-pm'].innerHTML = renderer.renderMarkdown(data.pm);
-            panels['panel-qa'].innerHTML = renderer.renderMarkdown(data.qa);
-            panels['panel-final'].innerHTML = renderer.renderMarkdown(data.final);
+            panels['panel-ba'].innerHTML = renderer.renderBAOutput(data.ba);
+            renderer.renderInto(panels['panel-pm'], data.pm);
+            renderer.renderInto(panels['panel-qa'], data.qa);
+            renderer.renderInto(panels['panel-final'], data.final);
             
             // Set all nodes to complete
             visualizer.reset();
@@ -212,10 +212,10 @@ document.addEventListener('DOMContentLoaded', () => {
         activeGeneration.qa = "";
         activeGeneration.final = "";
         
-        panels['panel-ba'].innerHTML = `<div style="padding: 10px; color: var(--color-ba);">Preparing Business Analyst environment...</div>`;
-        panels['panel-pm'].innerHTML = `<div style="padding: 10px; color: var(--color-pm);">Waiting for Business Analyst stage completion...</div>`;
-        panels['panel-qa'].innerHTML = `<div style="padding: 10px; color: var(--color-qa);">Waiting for Product Manager stage completion...</div>`;
-        panels['panel-final'].innerHTML = `<div style="padding: 10px; color: var(--color-primary);">Waiting for Pipeline Synthesis...</div>`;
+        panels['panel-ba'].innerHTML = `<div style="padding: 16px 0; color: var(--color-ba); font-size: 13px; font-weight: 600; opacity: 0.8;">⏳ Preparing Business Analyst environment...</div>`;
+        panels['panel-pm'].innerHTML = `<div style="padding: 16px 0; color: var(--color-text-muted); font-size: 13px;">Waiting for Business Analyst stage to complete...</div>`;
+        panels['panel-qa'].innerHTML = `<div style="padding: 16px 0; color: var(--color-text-muted); font-size: 13px;">Waiting for Product Manager stage to complete...</div>`;
+        panels['panel-final'].innerHTML = `<div style="padding: 16px 0; color: var(--color-text-muted); font-size: 13px;">Waiting for full pipeline to synthesize...</div>`;
         
         statusBanner.style.display = 'flex';
         statusText.textContent = "Initializing multi-agent pipeline...";
@@ -290,13 +290,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             case 'ba_chunk':
                 activeGeneration.ba += text;
-                panels['panel-ba'].textContent = activeGeneration.ba; // Keep simple text while streaming
+                // Show raw text while streaming to avoid parse errors mid-stream
+                panels['panel-ba'].innerHTML = `<pre style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.65);white-space:pre-wrap;line-height:1.7;">${renderer.escapeHtml(activeGeneration.ba)}</pre>`;
                 break;
                 
             case 'ba_done':
                 visualizer.setAgentState('ba', 'done');
                 activeGeneration.ba = text;
-                panels['panel-ba'].innerHTML = renderer.renderBAJson(text); // Beautiful formatting when done
+                panels['panel-ba'].innerHTML = renderer.renderBAOutput(text);
                 break;
                 
             case 'pm_start':
@@ -307,13 +308,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             case 'pm_chunk':
                 activeGeneration.pm += text;
-                panels['panel-pm'].innerHTML = renderer.renderMarkdown(activeGeneration.pm);
+                renderer.renderInto(panels['panel-pm'], activeGeneration.pm);
                 break;
                 
             case 'pm_done':
                 visualizer.setAgentState('pm', 'done');
                 activeGeneration.pm = text;
-                panels['panel-pm'].innerHTML = renderer.renderMarkdown(text);
+                renderer.renderInto(panels['panel-pm'], text);
                 break;
                 
             case 'qa_start':
@@ -324,13 +325,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             case 'qa_chunk':
                 activeGeneration.qa += text;
-                panels['panel-qa'].innerHTML = renderer.renderMarkdown(activeGeneration.qa);
+                renderer.renderInto(panels['panel-qa'], activeGeneration.qa);
                 break;
                 
             case 'qa_done':
                 visualizer.setAgentState('qa', 'done');
                 activeGeneration.qa = text;
-                panels['panel-qa'].innerHTML = renderer.renderMarkdown(text);
+                renderer.renderInto(panels['panel-qa'], text);
                 break;
                 
             case 'syn_start':
@@ -341,13 +342,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 
             case 'syn_chunk':
                 activeGeneration.final += text;
-                panels['panel-final'].innerHTML = renderer.renderMarkdown(activeGeneration.final);
+                renderer.renderInto(panels['panel-final'], activeGeneration.final);
                 break;
                 
             case 'syn_done':
                 visualizer.setAgentState('syn', 'done');
                 activeGeneration.final = text;
-                panels['panel-final'].innerHTML = renderer.renderMarkdown(text);
+                renderer.renderInto(panels['panel-final'], text);
                 break;
                 
             case 'done':
@@ -378,7 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     exportPdfBtn.addEventListener('click', () => {
-        window.ExportHandler.exportPDF();
+        const productName = promptInput.value.trim();
+        window.ExportHandler.exportPDF(productName);
     });
 
     // 8. Init calls

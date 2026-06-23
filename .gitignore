@@ -31,3 +31,9 @@ backend/memory/history.json
 *.sln
 *.swp
 
+# Documents
+*.pdf
+
+# Scratch/temp files
+scratch_*
+*.ps1

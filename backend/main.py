@@ -199,7 +199,7 @@ class BlueprintAIRequestHandler(BaseHTTPRequestHandler):
             send_event("syn_start")
             
             syn_agent = Synthesis()
-            for chunk in syn_agent.run(groq_client, pm_output, qa_output, prompt, industry):
+            for chunk in syn_agent.run(groq_client, ba_output, pm_output, qa_output, prompt, industry):
                 final_prd += chunk
                 send_event("syn_chunk", chunk)
             send_event("syn_done", final_prd)
