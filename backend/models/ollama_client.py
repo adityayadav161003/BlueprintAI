@@ -111,6 +111,57 @@ class OllamaClient:
         else:
             raise RuntimeError("Ollama is offline and mock fallback is disabled.")
 
+    def _customize_mock_text(self, text: str, idea: str, industry: str) -> str:
+        # Standardize inputs
+        if not idea:
+            idea = "a modern software product"
+        if not industry:
+            industry = "Technology"
+
+        # Determine short name for the product (e.g. "Placement App" or capitalized idea)
+        short_name = idea.split(" for ")[0].split(" to ")[0].strip()
+        # Capitalize first letters of words in short name
+        short_name = " ".join([w.capitalize() for w in short_name.split(" ")])
+
+        # Replace default placement app concept
+        text = text.replace("A placement app for university students to grab opportunity from big companies", idea)
+        text = text.replace("a placement app for university students to grab opportunity from big companies", idea.lower())
+        text = text.replace("A Placement App For University Students To Grab Opportunity From Big Companies", short_name)
+        text = text.replace("A placement app for university students to grab opportunity from big companies", short_name)
+        text = text.replace("A placement app", short_name)
+        text = text.replace("a placement app", short_name.lower())
+        
+        # Replace default target audience and companies
+        text = text.replace("university students", "target users")
+        text = text.replace("university student", "user")
+        text = text.replace("University Students", "Target Users")
+        text = text.replace("University Student", "User")
+        
+        text = text.replace("big companies", "external partners/employers")
+        text = text.replace("big company", "partner/employer")
+        text = text.replace("Big Companies", "Partners & Employers")
+        
+        # Replace industry
+        text = text.replace("SaaS / Web App", industry)
+        text = text.replace("SaaS/Web App", industry)
+
+        # Replace specific placement terms to make it generic
+        text = text.replace("placement portal", f"{short_name.lower()} portal")
+        text = text.replace("job match", "core match")
+        text = text.replace("job listings", "listings/items")
+        text = text.replace("job listing", "listing/item")
+        text = text.replace("Job Listings", "Listings & Items")
+        text = text.replace("Job Listing", "Listing & Item")
+        text = text.replace("job search", "search & discovery")
+        text = text.replace("job application", "submission/transaction")
+        text = text.replace("Job Application", "Submission & Transaction")
+        
+        # Persona replacements
+        text = text.replace("Emily Chen", "Emily Chen (User)")
+        text = text.replace("Rohan Patel", "Rohan Patel (Secondary User)")
+        
+        return text
+
     def _generate_mock_stream(self, agent_type: str, user_idea: str, industry: str) -> Generator[str, None, None]:
         """
         Simulates high-quality, product-specific agent outputs for the frontend.
@@ -126,6 +177,9 @@ class OllamaClient:
             mock_data = self._get_mock_qa(idea, ind)
         else:
             mock_data = self._get_mock_syn(idea, ind)
+
+        # Customize mock data dynamically to avoid outputting same text for every idea
+        mock_data = self._customize_mock_text(mock_data, idea, ind)
 
         words = mock_data.split(" ")
         chunk_size = 3
