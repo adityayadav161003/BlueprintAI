@@ -3,99 +3,487 @@ from backend.agents import BaseAgent
 
 
 class ProductManager(BaseAgent):
+    """
+    Product Manager Agent
+
+    Converts business strategy into
+    product requirements.
+
+    Responsible for:
+
+    - Product Vision
+    - MVP Definition
+    - Feature Architecture
+    - User Stories
+    - Functional Requirements
+    - Non Functional Requirements
+    - System Architecture
+    - API Design
+    - Database Design
+    - UX Flows
+    - KPIs
+
+    Output Target:
+    3500–5000 words
+    """
+
     def __init__(self):
         super().__init__("pm")
 
-    def run(self, groq_client, ba_output: str, user_idea: str, industry: str) -> Generator[str, None, None]:
-        """
-        Executes the Product Manager agent — Sections 6-9 of the PRD.
-        """
-        system_prompt = f"""You are a senior Product Manager at a well-funded startup. You will translate user needs into precise product requirements for: "{user_idea}"
+    def run(
+        self,
+        groq_client,
+        ba_output: str,
+        user_idea: str,
+        industry: str
+    ) -> Generator[str, None, None]:
 
-THE MOST CRITICAL RULE:
-Everything you write must describe features and requirements of "{user_idea}" ONLY.
+        system_prompt = f"""
+You are a Principal Product Manager.
 
-ABSOLUTE PROHIBITIONS:
-- Never write user stories that could apply to a different product
-- Never describe ChromaDB, SSE streaming, Ollama, vector databases, or any AI pipeline infrastructure as features of the user's product
-- Never use placeholder competitor names
-- Never write functional requirements for a generic SaaS template — write them for THIS specific product
-- Never include stories like "generate a structured outline" unless the product literally is a document generator
+Background:
 
-QUALITY GATE: For every user story and functional requirement, ask: "Is this an action a real user of {user_idea} would actually perform?" If no, delete it."""
+- Google PM
+- Amazon PM
+- YC Founder
+- Startup CTO
 
-        prompt = f"""You are a senior Product Manager. You have received business context from the BA agent. Now translate user needs into precise product requirements for:
+You are responsible for converting
+business strategy into an implementation-ready
+Product Design Specification.
 
-PRODUCT: {user_idea}
-INDUSTRY: {industry}
+==================================================
+PRODUCT
+==================================================
 
-BUSINESS CONTEXT FROM BA AGENT:
-{ba_output[:3000] if len(ba_output) > 3000 else ba_output}
+{user_idea}
 
-Produce the following sections. Everything must describe features of "{user_idea}" only.
+INDUSTRY:
 
----
+{industry}
 
-## 3. Prioritized User Stories (MoSCoW)
+==================================================
+ABSOLUTE RULES
+==================================================
 
-Write 8–12 user stories prioritized using MoSCoW.
-Every story must describe a real action inside "{user_idea}". Format each story as:
-"**As a** [specific user type from personas], **I want to** [perform a specific action in "{user_idea}"], **so that** [specific benefit].
-* **Acceptance Criteria:** Given [context], When [user action], Then [system outcome]."
+1. EVERYTHING MUST BE PRODUCT SPECIFIC
 
-Divide them into:
-* **Must Have (Sprint 1-2):** Core loop features required for launch.
-* **Should Have (Sprint 3-4):** Important but non-blocking features.
-* **Could Have (Post-MVP):** Nice-to-have features or future ideas.
-* **Won't Have (MVP Exclusions):** Excluded features with brief justification.
+Never create generic user stories.
 
----
+Bad:
 
-## 4. Functional Requirements
+"As a user I want notifications."
 
-Produce a detailed table listing functional requirements for the core loops and flows.
-The table must contain: ID, FEATURE, USER STORY REF (e.g., US-101), DETAILED DESCRIPTION, ACCEPTANCE CRITERIA, PRIORITY (High/Medium/Low), EST. EFFORT (e.g., 2 days).
+Good:
 
-| ID | FEATURE | USER STORY REF | DETAILED DESCRIPTION | ACCEPTANCE CRITERIA | PRIORITY | EST. EFFORT |
-|---|---|---|---|---|---|---|
+"As a patient I want refill reminders
+3 days before medicine depletion."
 
----
+--------------------------------------------------
 
-## 5. Non-Functional Requirements
+2. NO GENERIC SAAS OUTPUT
 
-Provide detailed requirements and standards under three specific subheadings:
-* **Performance SLAs:** A table with columns (METRIC, REQUIREMENT, MEASUREMENT METHOD) detailing page load, search/processing times, and booking/transaction times.
-* **Security & Compliance:** A table with columns (REQUIREMENT, STANDARD, IMPLEMENTATION) detailing encryption standard, authentication method, and data compliance strategy.
-* **Scalability Plan:** A phased scaling strategy for users and database architecture (e.g. Phase 1: 0-1K users, Phase 2: 1K-10K users, Phase 3: 10K+ users).
+Forbidden:
 
----
+dashboard
+analytics
+reports
 
-## 6. Technical Architecture
+unless required by product.
 
-Define the blueprint's technical layers and integration contracts:
-* **Recommended Tech Stack:** A table detailing (LAYER, TECHNOLOGY, JUSTIFICATION) for Frontend, Backend, Database, Cache, Search, Auth, Hosting, and CI/CD.
-* **System Architecture Overview:** Briefly describe the backend/client interactions and provide an ASCII text diagram or Mermaid diagram detailing the flow of request to database.
-* **Data Model (Key Entities):** List key database tables and their fields (e.g., User, Booking, etc.).
-* **API Design (Key Endpoints):** A table with columns (METHOD, ENDPOINT, DESCRIPTION, REQUEST BODY, RESPONSE) mapping the main routes of "{user_idea}".
+--------------------------------------------------
 
----
+3. CREATE REAL FEATURES
 
-## 7. UI/UX Specifications
+Each feature must solve a business problem.
 
-Outline the interface rules:
-* **Screen Inventory:** List the core pages/screens needed for this product.
-* **Design System Requirements:** Define rules for Typography, Color Palette, and Spacing System.
-* **Critical User Flows:** Explain the top 2-3 interactive flows step-by-step.
+--------------------------------------------------
 
----
+4. REQUIREMENTS MUST BE TESTABLE
 
-## 11. Success Metrics & KPIs
+Every requirement must have
+acceptance criteria.
 
-Define the metrics that matter most for this specific type of product:
-* **North Star Metric:** The single most important measurement of success for "{user_idea}".
-* **Metric Framework:** A table with columns (METRIC, BASELINE, MONTH 1, MONTH 3, MONTH 6, MONTH 12) detailing specific targets.
-* **Analytics Implementation:** Outline events to track, funnel definitions, and dashboard requirements."""
+--------------------------------------------------
 
+5. SYSTEM DESIGN MUST MATCH PRODUCT
+
+Dating App ≠ Medicine App
+
+Marketplace ≠ Insurance Platform
+
+Never reuse architecture blindly.
+
+--------------------------------------------------
+
+6. USE REALISTIC NUMBERS
+
+Performance targets
+
+Latency
+
+Scale
+
+Storage
+
+Must be realistic.
+
+--------------------------------------------------
+
+7. DO NOT INVENT AI FEATURES
+
+Only include AI if naturally required.
+
+==================================================
+OUTPUT QUALITY
+==================================================
+
+Minimum:
+
+3500 words
+
+Preferred:
+
+5000 words
+
+==================================================
+"""
+
+        prompt = f"""
+You have received the following
+Business Analysis Report.
+
+==================================================
+BUSINESS REPORT
+==================================================
+
+{ba_output}
+
+==================================================
+YOUR TASK
+==================================================
+
+Transform strategy into
+a complete Product Specification.
+
+==================================================
+SECTION 1
+PRODUCT VISION
+==================================================
+
+Create:
+
+- Product Mission
+- Product Vision
+- Product Principles
+- Product Goals
+- Product Constraints
+
+==================================================
+SECTION 2
+MVP DEFINITION
+==================================================
+
+Define:
+
+- MVP Scope
+- MVP Objectives
+- MVP Success Criteria
+- MVP Exclusions
+
+Include:
+
+Must Have
+Should Have
+Could Have
+Won't Have
+
+==================================================
+SECTION 3
+FEATURE BREAKDOWN
+==================================================
+
+Create detailed feature hierarchy.
+
+Example:
+
+Authentication
+Profile Management
+Discovery
+Booking
+Payments
+
+etc.
+
+For each feature:
+
+Purpose
+Business Value
+Dependencies
+
+==================================================
+SECTION 4
+USER STORIES
+==================================================
+
+Generate 15-20 user stories.
+
+Structure:
+
+Must Have
+Should Have
+Could Have
+
+Format:
+
+As a [persona]
+I want [action]
+So that [benefit]
+
+Acceptance Criteria:
+
+Given
+When
+Then
+
+==================================================
+SECTION 5
+FUNCTIONAL REQUIREMENTS
+==================================================
+
+Generate minimum 40 requirements.
+
+Table:
+
+| ID |
+| Feature Area |
+| Description |
+| Acceptance Criteria |
+| Priority |
+
+Priority:
+
+P0
+P1
+P2
+
+==================================================
+SECTION 6
+NON FUNCTIONAL REQUIREMENTS
+==================================================
+
+Table:
+
+Performance
+
+Availability
+
+Reliability
+
+Security
+
+Scalability
+
+Accessibility
+
+Compliance
+
+Maintainability
+
+Observability
+
+Disaster Recovery
+
+==================================================
+SECTION 7
+SYSTEM ARCHITECTURE
+==================================================
+
+Explain architecture.
+
+Generate Mermaid Diagram.
+
+Example:
+
+```mermaid
+flowchart LR
+````
+
+Use product-specific services.
+
+==================================================
+SECTION 8
+DATABASE DESIGN
+===============
+
+Create:
+
+Core Entities
+
+Relationships
+
+Primary Keys
+
+Foreign Keys
+
+Entity descriptions
+
+Then generate ERD Mermaid:
+
+```mermaid
+erDiagram
+```
+
+==================================================
+SECTION 9
+API DESIGN
+==========
+
+Minimum 15 APIs.
+
+Table:
+
+| Method |
+| Endpoint |
+| Purpose |
+| Request |
+| Response |
+
+==================================================
+SECTION 10
+WORKFLOW DIAGRAMS
+=================
+
+Create Mermaid diagrams for:
+
+User Onboarding
+
+Core Product Flow
+
+Transaction Flow
+
+Admin Flow
+
+Support Flow
+
+==================================================
+SECTION 11
+UI/UX SPECIFICATION
+===================
+
+Screen Inventory
+
+Screen Purpose
+
+Navigation Structure
+
+Design Principles
+
+Typography
+
+Color System
+
+Accessibility Requirements
+
+==================================================
+SECTION 12
+SECURITY MODEL
+==============
+
+Authentication
+
+Authorization
+
+Encryption
+
+Fraud Prevention
+
+Data Protection
+
+Audit Logging
+
+==================================================
+SECTION 13
+COMPLIANCE REQUIREMENTS
+=======================
+
+Identify relevant compliance.
+
+Examples:
+
+GDPR
+
+CCPA
+
+HIPAA
+
+PCI-DSS
+
+SOC2
+
+Only include relevant ones.
+
+==================================================
+SECTION 14
+ANALYTICS FRAMEWORK
+===================
+
+Define events.
+
+Track:
+
+Acquisition
+
+Activation
+
+Retention
+
+Revenue
+
+Referral
+
+==================================================
+SECTION 15
+SUCCESS METRICS
+===============
+
+Create KPI tables.
+
+Month 1
+
+Month 3
+
+Month 6
+
+Month 12
+
+Include:
+
+North Star Metric
+
+Conversion Rate
+
+Retention
+
+Revenue
+
+Operational Metrics
+
+==================================================
+IMPORTANT
+=========
+
+No placeholders.
+
+No generic text.
+
+No missing sections.
+
+All requirements must be
+implementation-ready.
+
+Generate complete content.
+"""
         for chunk in groq_client.generate_stream(
             prompt=prompt,
             system_prompt=system_prompt,

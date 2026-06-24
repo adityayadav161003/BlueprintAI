@@ -1,168 +1,400 @@
 """
-Groq API Client for BlueprintAI
-Connects to Groq's OpenAI-compatible API for fast LLM inference.
-Model: llama-3.3-70b-versatile (default) or any Groq-supported model.
+Enterprise Groq Client
+BlueprintAI v2
+
+Improvements:
+
+- Better Streaming
+- Retry Logic
+- Exponential Backoff
+- Output Validation
+- Large PRD Support
+- Better Error Handling
+- Token Tracking
+- Quality Safeguards
 """
+
 import os
 import json
 import time
 import urllib.request
 import urllib.error
+
 from typing import Generator
 
 
 def load_env():
-    """Load .env file from the same directory as this module's backend parent."""
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    env_path = os.path.join(base_dir, ".env")
-    if os.path.exists(env_path):
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#"):
-                    parts = line.split("=", 1)
-                    if len(parts) == 2:
-                        key = parts[0].strip()
-                        val = parts[1].strip().strip('"').strip("'")
-                        os.environ.setdefault(key, val)
+    """
+    Load .env automatically.
+    """
+
+    current_dir = os.path.dirname(
+        os.path.abspath(__file__)
+    )
+
+    backend_dir = os.path.dirname(current_dir)
+
+    env_path = os.path.join(
+        backend_dir,
+        ".env"
+    )
+
+    if not os.path.exists(env_path):
+        return
+
+    with open(
+        env_path,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        for line in f:
+
+            line = line.strip()
+
+            if (
+                not line
+                or line.startswith("#")
+            ):
+                continue
+
+            if "=" not in line:
+                continue
+
+            key, value = line.split(
+                "=",
+                1
+            )
+
+            os.environ.setdefault(
+                key.strip(),
+                value.strip()
+                .strip('"')
+                .strip("'")
+            )
 
 
 load_env()
 
-GROQ_BASE_URL = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-
 
 class GroqClient:
-    """
-    Streaming client for Groq API using OpenAI-compatible /chat/completions endpoint.
-    Uses only Python stdlib (urllib) — no external dependencies required.
-    """
 
-    def __init__(self, api_key: str = None, model: str = None, base_url: str = None):
-        self.api_key = api_key or os.getenv("GROQ_API_KEY", GROQ_API_KEY)
-        self.model = model or os.getenv("GROQ_MODEL", GROQ_MODEL)
-        self.base_url = (base_url or os.getenv("GROQ_BASE_URL", GROQ_BASE_URL)).rstrip("/")
+    DEFAULT_MODEL = os.getenv(
+        "GROQ_MODEL",
+        "llama-3.3-70b-versatile"
+    )
+
+    DEFAULT_URL = os.getenv(
+        "GROQ_BASE_URL",
+        "https://api.groq.com/openai/v1"
+    )
+
+    DEFAULT_MAX_TOKENS = int(
+        os.getenv(
+            "GROQ_MAX_TOKENS",
+            "8192"
+        )
+    )
+
+    DEFAULT_TEMPERATURE = float(
+        os.getenv(
+            "GROQ_TEMPERATURE",
+            "0.45"
+        )
+    )
+
+    def __init__(
+        self,
+        api_key=None,
+        model=None,
+        base_url=None
+    ):
+
+        self.api_key = (
+            api_key
+            or os.getenv("GROQ_API_KEY")
+        )
 
         if not self.api_key:
             raise ValueError(
-                "GROQ_API_KEY is not set. Add it to backend/.env: GROQ_API_KEY=gsk_..."
+                "GROQ_API_KEY missing."
             )
+
+        self.model = (
+            model
+            or self.DEFAULT_MODEL
+        )
+
+        self.base_url = (
+            base_url
+            or self.DEFAULT_URL
+        ).rstrip("/")
+
+    def _build_payload(
+        self,
+        prompt,
+        system_prompt
+    ):
+
+        return {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            "temperature":
+                self.DEFAULT_TEMPERATURE,
+            "max_tokens":
+                self.DEFAULT_MAX_TOKENS,
+            "stream": True
+        }
+
+    def _stream_request(
+        self,
+        payload
+    ):
+
+        url = (
+            f"{self.base_url}"
+            "/chat/completions"
+        )
+
+        request = urllib.request.Request(
+            url,
+            data=json.dumps(payload)
+            .encode("utf-8"),
+            headers={
+                "Content-Type":
+                    "application/json",
+
+                "Authorization":
+                    f"Bearer {self.api_key}",
+
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            method="POST"
+        )
+
+        return urllib.request.urlopen(
+            request,
+            timeout=240
+        )
 
     def generate_stream(
         self,
         prompt: str,
         system_prompt: str,
-        agent_type: str = "ba",
+        agent_type: str = "generic",
         user_idea: str = "",
-        industry: str = "",
+        industry: str = ""
     ) -> Generator[str, None, None]:
-        """
-        Streams chat completion from Groq API token-by-token via SSE.
 
-        Args:
-            prompt: The user message / main instruction.
-            system_prompt: The agent's role/personality system message.
-            agent_type: One of 'ba', 'pm', 'qa', 'syn' (used for logging only).
-            user_idea: Raw product idea (for context injection).
-            industry: Target industry (for context injection).
+        payload = self._build_payload(
+            prompt,
+            system_prompt
+        )
 
-        Yields:
-            str: Individual text chunks as they stream from Groq.
-        """
-        url = f"{self.base_url}/chat/completions"
+        max_retries = 5
 
-        messages = [
-            {"role": "system", "content": system_prompt.strip()},
-            {"role": "user", "content": prompt.strip()},
-        ]
+        retry_delay = 3
 
-        payload = {
-            "model": self.model,
-            "messages": messages,
-            "stream": True,
-            "temperature": 0.65,
-            "max_tokens": 4096,
-        }
+        total_output = ""
 
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        }
+        for attempt in range(
+            max_retries
+        ):
 
-        max_retries = 3
-        retry_delay = 5  # Start with 5 seconds delay
-
-        for attempt in range(max_retries):
             try:
-                req = urllib.request.Request(
-                    url,
-                    data=json.dumps(payload).encode("utf-8"),
-                    headers=headers,
-                    method="POST",
+
+                print(
+                    f"[Groq]"
+                    f" Agent={agent_type}"
+                    f" Attempt={attempt+1}"
                 )
 
-                print(f"[GroqClient] Streaming agent={agent_type} model={self.model} (Attempt {attempt + 1}/{max_retries})")
+                with self._stream_request(
+                    payload
+                ) as response:
 
-                with urllib.request.urlopen(req, timeout=120) as response:
                     for raw_line in response:
-                        line = raw_line.decode("utf-8").strip()
 
-                        # SSE format: lines start with "data: "
-                        if not line.startswith("data: "):
+                        line = (
+                            raw_line
+                            .decode("utf-8")
+                            .strip()
+                        )
+
+                        if not line.startswith(
+                            "data: "
+                        ):
                             continue
 
-                        data_str = line[6:]  # Strip "data: "
+                        line = line[6:]
 
-                        # "[DONE]" signals end of stream
-                        if data_str == "[DONE]":
-                            return
+                        if line == "[DONE]":
+                            break
 
                         try:
-                            data = json.loads(data_str)
-                            choices = data.get("choices", [])
+
+                            data = json.loads(
+                                line
+                            )
+
+                            choices = data.get(
+                                "choices",
+                                []
+                            )
+
                             if not choices:
                                 continue
-                            delta = choices[0].get("delta", {})
-                            content = delta.get("content", "")
+
+                            delta = (
+                                choices[0]
+                                .get(
+                                    "delta",
+                                    {}
+                                )
+                            )
+
+                            content = (
+                                delta.get(
+                                    "content",
+                                    ""
+                                )
+                            )
+
                             if content:
+
+                                total_output += (
+                                    content
+                                )
+
                                 yield content
-                        except (json.JSONDecodeError, KeyError, IndexError):
+
+                        except Exception:
                             continue
-                # If stream consumed successfully, exit the generator
+
+                # Quality Check
+
+                if len(
+                    total_output
+                ) < 500:
+
+                    raise RuntimeError(
+                        "Output too short."
+                    )
+
                 return
 
             except urllib.error.HTTPError as e:
-                # Handle rate limit (429) with retry
-                if e.code == 429 and attempt < max_retries - 1:
-                    print(f"[GroqClient] Rate limit (429) encountered. Retrying in {retry_delay}s...")
-                    time.sleep(retry_delay)
-                    retry_delay *= 2
-                    continue
 
-                error_body = ""
+                body = ""
+
                 try:
-                    error_body = e.read().decode("utf-8")
+                    body = (
+                        e.read()
+                        .decode(
+                            "utf-8"
+                        )
+                    )
                 except Exception:
                     pass
+
+                if e.code in [413, 429] and payload.get("model") == "llama-3.3-70b-versatile":
+                    print(
+                        f"[Groq Fallback] Limit exceeded ({e.code}) for model '{payload.get('model')}'. "
+                        f"Switching to fallback 'meta-llama/llama-4-scout-17b-16e-instruct'..."
+                    )
+                    payload["model"] = "meta-llama/llama-4-scout-17b-16e-instruct"
+                    time.sleep(1)
+                    continue
+                elif e.code in [413, 429] and payload.get("model") == "meta-llama/llama-4-scout-17b-16e-instruct":
+                    print(
+                        f"[Groq Fallback] Limit exceeded ({e.code}) for model '{payload.get('model')}'. "
+                        f"Switching to fallback 'llama-3.1-8b-instant'..."
+                    )
+                    payload["model"] = "llama-3.1-8b-instant"
+                    time.sleep(1)
+                    continue
+
+                if (
+                    e.code in
+                    [429, 500, 502, 503]
+                    and
+                    attempt <
+                    max_retries - 1
+                ):
+
+                    print(
+                        f"[Groq Retry]"
+                        f" {e.code}"
+                    )
+
+                    time.sleep(
+                        retry_delay
+                    )
+
+                    retry_delay *= 2
+
+                    continue
+
                 raise RuntimeError(
-                    f"Groq API HTTP {e.code} error for agent '{agent_type}': {error_body}"
-                ) from e
+                    f"Groq Error:"
+                    f" {e.code}"
+                    f" {body}"
+                )
 
             except urllib.error.URLError as e:
-                # Handle connection issues with retry
-                if attempt < max_retries - 1:
-                    print(f"[GroqClient] Connection failed ({e.reason}). Retrying in {retry_delay}s...")
-                    time.sleep(retry_delay)
+
+                if (
+                    attempt <
+                    max_retries - 1
+                ):
+
+                    print(
+                        "[Groq Network Retry]"
+                    )
+
+                    time.sleep(
+                        retry_delay
+                    )
+
                     retry_delay *= 2
+
                     continue
+
                 raise RuntimeError(
-                    f"Groq API connection failed for agent '{agent_type}': {e.reason}"
-                ) from e
+                    f"Connection Error:"
+                    f" {e.reason}"
+                )
 
             except Exception as e:
+
+                if (
+                    attempt <
+                    max_retries - 1
+                ):
+
+                    print(
+                        "[Groq Retry]"
+                    )
+
+                    time.sleep(
+                        retry_delay
+                    )
+
+                    retry_delay *= 2
+
+                    continue
+
                 raise RuntimeError(
-                    f"Unexpected error in Groq stream for agent '{agent_type}': {e}"
-                ) from e
+                    f"Groq Failure:"
+                    f" {str(e)}"
+                )
