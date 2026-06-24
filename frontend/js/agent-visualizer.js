@@ -59,13 +59,13 @@ class AgentVisualizer {
         
         let percentage = '0%';
         if (agent === 'ba') {
-            percentage = state === 'active' ? '12.5%' : '25%';
+            percentage = state === 'active' ? '0%' : '33.3%';
         } else if (agent === 'pm') {
-            percentage = state === 'active' ? '37.5%' : '50%';
+            percentage = state === 'active' ? '33.3%' : '66.7%';
         } else if (agent === 'qa') {
-            percentage = state === 'active' ? '62.5%' : '75%';
+            percentage = state === 'active' ? '66.7%' : '100%';
         } else if (agent === 'syn') {
-            percentage = state === 'active' ? '87.5%' : '100%';
+            percentage = '100%';
         }
         
         this.progressBar.style.height = percentage;
