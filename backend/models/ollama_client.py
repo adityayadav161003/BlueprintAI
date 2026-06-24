@@ -192,402 +192,540 @@ class OllamaClient:
     def _get_mock_ba(self, idea: str, industry: str) -> str:
         return f"""## Executive Summary
 
-A placement app for university students to grab opportunity from big companies is a web-based platform designed to connect university students with job opportunities at top companies. The app aims to solve the problem of students struggling to find and secure job placements, and companies having difficulty finding the best candidates.
+Provide a high-level summary of the product blueprint using the following bullet points:
+- **Product Vision:** To become the premier platform for A placement app for university students to grab opportunity from big companies, establishing a seamless link between university students and opportunities.
+- **Core Problem:** University students struggle to find and secure job placements, while big companies face high friction and difficulty in filtering the best candidate profiles efficiently.
+- **Our Solution:** A placement app provides a streamlined matching engine, verified candidate credentials, and direct communication channels.
+- **Target Customer:** University students seeking internships/placements and recruiters from big companies.
+- **Business Model:** Premium subscription tiers for employers, premium resume services for students, and success fee commissions.
+- **MVP Launch Target:** 12 weeks.
+- **Success Definition:** 5,000 active university students registered, 50 big companies onboarded, and over 1,000 successful placements in Month 1.
 
 ---
 
-## 1. Problem Statement & Market Opportunity
+## 1. Problem Statement & Opportunity
 
-The specific problem that this product solves is the difficulty university students face in finding and securing job placements with big companies. Currently, students rely on university career fairs, online job boards like LinkedIn and Indeed, and personal networking to find opportunities. However, these methods often result in a high volume of unqualified applicants.
+The specific problem that this product solves is the difficulty university students face in finding and securing job placements with big companies. Currently, students rely on university career fairs, online job boards like LinkedIn and Indeed, and personal networking to find opportunities. However, these methods often result in a high volume of unqualified applicants, slow response cycles, and a lack of specific match indicators.
 
-The market size for this problem is significant, with over 20 million university students in the US alone. The market opportunity is estimated to be around $1.5 billion, considering the average cost of recruiting a single candidate is around $4,000.
-
----
-
-## 2. Target Audience
-
-The primary population of people who would use "A placement app for university students to grab opportunity from big companies" are university students aged 18-25, primarily based in urban areas, with a focus on those pursuing degrees in in-demand fields such as computer science, engineering, and business.
+The market size for this problem is significant, with over 20 million university students in the US alone. The market opportunity is estimated to be around $1.5 billion, considering the average cost of recruiting a single candidate is around $4,000. Recently, the shift towards online recruitment and the increasing importance of digital presence have made it viable for a dedicated product to address this problem.
 
 ---
 
-## 3. User Personas
+## 2. Target User Personas
 
 ### Emily Chen, 21 — Junior majoring in Computer Science, San Francisco
-- **Income:** $1,500
+- **Demographics:** Female, 21, undergraduate student, tech-savvy, lives in shared university housing.
 - **Daily Workflow:** Emily spends several hours a week browsing job boards, attending career fairs, and networking with alumni to find internship opportunities.
-- **Pain Points:** She is frustrated with the lack of personalized job recommendations on platforms like LinkedIn and the difficulty in standing out in a crowded applicant pool.
+- **Pain Points:** Frustrated with the lack of personalized job recommendations on platforms like LinkedIn and the difficulty in standing out in a crowded applicant pool.
 - **Goals:** Emily wants to secure a summer internship at a top tech firm and eventually land a full-time job offer after graduation.
-- **Tech Comfort:** High, prefers using her smartphone for most tasks.
-- **Quote:** "I feel like I'm just throwing my resume into a black hole when I apply for jobs online. I wish there was a way to get my foot in the door and actually talk to people at the companies I'm interested in."
-- **Usage Pattern:** Emily would use the app daily to browse job openings, practice interview skills, and connect with company representatives.
+- **Tech Stack:** High comfort; uses macOS, iOS, GitHub, Slack, and LinkedIn daily.
+- **Budget Authority:** Student budget, highly price-sensitive; willing to pay up to $10/month for premium career tools.
+- **Success Metrics:** Landing at least 3 interviews within 2 weeks of profile completion.
+- **Quote:** "I feel like I'm just throwing my resume into a black hole when I apply for jobs online. I wish there was a way to get my foot in the door."
+- **Usage Pattern:** Daily usage to check match status, application views, and respond to recruiter messages.
 
 ### Rohan Patel, 22 — Senior majoring in Business Administration, New York
-- **Income:** $2,000
+- **Demographics:** Male, 22, graduating senior, highly ambitious, active in student finance societies.
 - **Daily Workflow:** Rohan networks extensively with professionals in his industry, attends career fairs, and applies to job openings on company websites.
-- **Pain Points:** He is frustrated with the lack of transparency in the recruitment process and the difficulty in getting feedback on his applications.
+- **Pain Points:** Lack of transparency in the recruitment process and the difficulty in getting feedback on his applications.
 - **Goals:** Rohan wants to land a full-time job at a top investment bank or consulting firm after graduation.
-- **Tech Comfort:** Medium.
+- **Tech Stack:** Medium comfort; uses Windows, iOS, MS Office, and LinkedIn.
+- **Budget Authority:** Moderate; willing to invest $50 for a professional resume review.
+- **Success Metrics:** Receiving direct inquiries from at least 2 big companies.
 - **Quote:** "I want to apply to companies where I know my profile matches what they want. Traditional portals don't show the match percentage."
 - **Usage Pattern:** Browses weekly, submits 2-3 applications a day.
 
----
-
-## 4. Competitive Analysis
-
-| Competitor | Strengths | Weaknesses | Our Advantage |
-|-----------|-----------|------------|---------------|
-| LinkedIn | Large user base, established brand | Limited personalization, high competition | Personalized job recommendations, simplified application process |
-| Indeed | Comprehensive job listings, user-friendly interface | Limited company information, high volume of unqualified applicants | Company profiles, tailored job matching |
-| Glassdoor | Valuable company insights, user reviews | Limited job listings, focus on company culture rather than job matching | Job listings, company information, and user reviews in one platform |
-
----
-
-## 5. Unique Value Proposition
-
-A placement app for university students to grab opportunity from big companies offers a unique value proposition by providing personalized job recommendations, company profiles, and a simplified application process. This app fills the gap in the current recruitment process by providing a dedicated platform for students to showcase their skills and companies to find top talent."""
-
+### Sarah Jenkins, 28 — Campus Recruiter at a Tech Giant, Seattle
+- **Demographics:** Female, 28, corporate recruiter, busy schedule, travels for university events.
+- **Daily Workflow:** Sarah reviews thousands of resumes, coordinates with university career centers, and conducts initial screening interviews.
+- **Pain Points:** Overwhelmed by low-quality, generic resume submissions and manual scheduling overhead.
+- **Goals:** Quickly identify top-tier talent matching specific engineering benchmarks and reduce time-to-hire.
+- **Tech Stack:** High comfort; uses Workday ATS, Slack, Zoom, and Outlook.
+- **Budget Authority:** Corporate department budget; authorized up to $5,000/year for recruiting platform licenses.
+- **Success Metrics:** Reducing candidate screening time by 40% and increasing interview-to-offer conversion rate.
+- **Quote:** "I need a way to filter candidates by actual verified skills and project portfolios, not just their GPA or school name."
+- **Usage Pattern:** Active daily during peak recruiting seasons (Fall/Spring), spending 3-4 hours per day on the portal."""
 
     def _get_mock_pm(self, idea: str, industry: str) -> str:
-        return f"""## 6. System Architecture
-
-The application will use a modern three-tier architecture: a responsive, single-page web client frontend; a lightweight HTTP API gateway backend serving Server-Sent Events (SSE); and a local file-based database schema for session persistence.
-
-```mermaid
-flowchart LR
-    Student(["👤 Student"]) --> WebUI["Frontend Portal"]
-    Recruiter(["🏢 Recruiter"]) --> WebUI
-    WebUI --> API["API Gateway"]
-    API --> Auth["Auth Service"]
-    API --> JobService["Job Match Engine"]
-    JobService --> DB[("Database")]
-```
-
----
-
-## 7. Prioritized User Stories
+        return f"""## 3. Prioritized User Stories
 
 ### Must-Have (Core Loop)
 *Without these, the product does not work.*
-
-1. **As a university student**, I want to create a profile showcasing my skills, education, and experience, so that I can increase my visibility to potential employers.
-   > **AC:** Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers.
-2. **As a university student**, I want to browse and search for job listings from big companies, so that I can find opportunities that match my skills and interests.
-   > **AC:** Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details.
-3. **As a university student**, I want to apply for job listings directly through the app, so that I can easily submit my application and resume.
-   > **AC:** Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer.
-4. **As a university student**, I want to receive notifications about new job listings that match my profile and preferences, so that I can stay up-to-date on new opportunities.
-   > **AC:** Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details.
-5. **As a university student**, I want to track the status of my job applications, so that I can stay organized and follow up with employers.
-   > **AC:** Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled").
+- **As a university student**, I want to create a profile showcasing my skills and projects, so that I can make my profile visible to employers.
+  > **AC:** Given I am a registered student, When I save my profile with valid fields, Then the profile is stored and visible to recruiter searches.
+- **As a university student**, I want to search and filter job listings, so that I can find matching placements.
+  > **AC:** Given I am on the job search page, When I input a search keyword or select a filter, Then the system returns filtered job listings within 500ms.
+- **As a university student**, I want to submit job applications directly, so that I can apply to big companies instantly.
+  > **AC:** Given I view a job listing, When I click "Apply", Then my profile data is sent to the company's recruiter and status changes to "Submitted".
+- **As a recruiter**, I want to view candidate applications and update their status, so that I can manage my hiring pipeline.
+  > **AC:** Given I am logged in as a recruiter, When I view a candidate, Then I can change their status (e.g. Under Review, Interview, Rejected).
 
 ### Should-Have
 *Significantly improves the experience.*
-
-6. **As a university student**, I want to receive personalized job recommendations based on my profile and search history, so that I can discover new opportunities that are tailored to my interests.
-   > **AC:** Given I am a registered user, When I log in, Then I see a list of recommended job listings that match my profile and search history.
-7. **As a university student**, I want to be able to filter job listings by location, industry, and job type, so that I can narrow down my search results to relevant opportunities.
-   > **AC:** Given I am a registered user, When I use the filter function, Then I see a list of job listings that match my selected criteria.
-8. **As a university student**, I want to be able to save job listings for later, so that I can come back to them and apply when I'm ready.
-   > **AC:** Given I am a registered user, When I click the "Save" button on a job listing, Then the job listing is added to my saved jobs list.
+- **As a university student**, I want to see a compatibility match score for each listing, so that I can prioritize where to apply.
+  > **AC:** Given I view job listings, When my profile has completed skills, Then each job displays a match percentage (e.g., 85% match).
+- **As a recruiter**, I want to schedule interviews directly through the app, so that I don't have to coordinate via email.
+  > **AC:** Given a candidate is moved to "Interview", When I click "Schedule", Then the system integrates with calendar availability.
 
 ### Could-Have
 *Defer if needed.*
+- **As a university student**, I want to get suggestions to improve my resume, so that I can increase my interview chances.
+  > **AC:** Given my profile is incomplete, When I request tips, Then the app highlights missing keywords based on popular job listings.
 
-9. **As a university student**, I want to be able to connect with other students and professionals in my industry, so that I can build my network and learn about new opportunities.
-   > **AC:** Given I am a registered user, When I join a group or community, Then I can see posts and discussions from other members and engage with them.
-10. **As a university student**, I want to be able to access resources and tips for improving my resume and interview skills, so that I can increase my chances of getting hired.
-    > **AC:** Given I am a registered user, When I access the resources section, Then I see a list of articles, videos, and tips on resume building and interview prep.
-
----
-
-## 8. Functional Requirements
-
-| ID | Feature Area | Description | Acceptance Criteria | Priority |
-|----|-------------|-------------|---------------------|----------|
-| 1 | User Profile | Create and manage user profiles | Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers | P0 |
-| 2 | Job Search | Search and filter job listings | Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details | P0 |
-| 3 | Job Application | Apply for job listings directly through the app | Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer | P0 |
-| 4 | Notifications | Receive notifications about new job listings | Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details | P0 |
-| 5 | Application Tracking | Track the status of job applications | Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled") | P0 |
-
-**Priority:** P0 = must have at launch, P1 = first 30 days post-launch, P2 = future
+### Won't-Have (MVP Exclusions)
+- **Automatic Background Verification:** Automated background checks for candidates will be excluded for the initial release to reduce complexity, relying on university-provided graduation lists instead.
 
 ---
 
-## 9. Non-Functional Requirements
+## 4. Functional Requirements
 
-| Category | Requirement | Target | Notes |
-|----------|-------------|--------|-------|
-| Performance | Page load time | 2 seconds | Measure using Google PageSpeed Insights |
-| Scalability | Handle concurrent users | 10,000 concurrent users | Use load testing tools to ensure scalability |
-| Security | Protect user data | 128-bit SSL encryption | Use HTTPS protocol to ensure secure data transmission |
-| Compliance | Data privacy laws | Comply with GDPR and CCPA regulations | Ensure user data is handled in accordance with regulations |
-| Availability | Uptime SLA | Ensure 99.9% uptime | Use monitoring tools to detect and respond to downtime |
-| Accessibility | WCAG compliance | Follow WCAG 2.1 guidelines | Use accessibility testing tools to identify and fix issues |
+| ID | FEATURE | USER STORY REF | DETAILED DESCRIPTION | ACCEPTANCE CRITERIA | PRIORITY | EST. EFFORT |
+|----|---------|----------------|----------------------|---------------------|----------|-------------|
+| FR-101 | Profile Creator | US-101 | Allows students to enter education, projects, skills, and upload resumes. | Fields validated, saved, and searchable. | High | 3 days |
+| FR-102 | Job Listing Search | US-102 | Index and search job listings by title, skills, location, and salary. | Search query returns relevant items within 500ms. | High | 4 days |
+| FR-103 | One-Click Apply | US-103 | Package profile details and send them as an application to the recruiter. | Application status updated in real-time. | High | 2 days |
+| FR-104 | Match Engine | US-105 | Algorithm comparing candidate skills with job requirements to calculate % match. | Score displays dynamically on job card. | Medium | 5 days |
+| FR-105 | Recruiter Dashboard | US-104 | Interface for recruiters to view, sort, and change status of applicants. | Pipeline kanban or list view updates instantly. | High | 4 days |
 
 ---
 
-## 10. Success Metrics & KPIs
+## 5. Non-Functional Requirements
 
-| Metric | What It Measures | Month 1 Target | Month 6 Target | Month 12 Target |
-|--------|-----------------|----------------|----------------|-----------------|
-| User Acquisition | Number of registered users | 1,000 | 10,000 | 50,000 |
-| Job Listings | Number of job listings | 100 | 1,000 | 5,000 |
-| Application Rate | Number of job applications | 50 | 500 | 2,000 |
-| Placement Rate | Number of successful placements | 10 | 100 | 500 |
+### Performance SLAs
+| METRIC | REQUIREMENT | MEASUREMENT METHOD |
+|--------|-------------|--------------------|
+| Page Load Time | < 2.0 seconds for landing page, < 1.0 second for dashboard. | Lighthouse Audits & Web Vitals. |
+| Search API Latency | Median latency < 300ms under load. | Server logs and APM tracing. |
+| Data Sync Delay | Real-time SSE updates within 200ms. | End-to-end telemetry. |
 
-**North Star Metric:** Placement Rate (number of successful placements)"""
+### Security & Compliance
+| REQUIREMENT | STANDARD | IMPLEMENTATION |
+|-------------|----------|----------------|
+| Data Encryption | AES-256 at rest, TLS 1.3 in transit. | HTTPS setup & AWS KMS managed keys. |
+| Authentication | OAuth 2.0 with JWT. | Auth0 integration & session token storage. |
+| Compliance | GDPR and CCPA. | Consent dialogs, data export, and deletion workflows. |
+
+### Scalability Plan
+- **Phase 1 (0-1K users):** Single database instance, server cache, standard backend deployment.
+- **Phase 2 (1K-10K users):** Read replicas for database, horizontally scaled backend pods with load balancer.
+- **Phase 3 (10K+ users):** Microservices migration, Redis caching cluster, Elasticsearch cluster for search.
+
+---
+
+## 6. Technical Architecture
+
+### Recommended Tech Stack
+| LAYER | TECHNOLOGY | JUSTIFICATION |
+|-------|------------|---------------|
+| Frontend | React.js, Tailwind CSS | Rapid UI development, responsive component rendering. |
+| Backend | Node.js / Express | Non-blocking I/O, ideal for streaming updates and REST APIs. |
+| Database | PostgreSQL | Relational integrity for user profiles, applications, and job listings. |
+| Cache & SSE | Redis | Session state management and SSE message pub/sub. |
+| Hosting | AWS (ECS / RDS) | Enterprise security, reliable backups, and automatic scaling. |
+
+### System Architecture Overview
+A placement app for university students to grab opportunity from big companies is built on a modern decoupled architecture. The React frontend interacts with the Express backend via REST endpoints and maintains an SSE connection for instant status updates.
+
+```mermaid
+flowchart TD
+    Client[React Web App] -->|HTTPS Requests| API[Express API Gateway]
+    API -->|Authenticate| Auth[Auth0 Provider]
+    API -->|Read/Write| DB[(PostgreSQL DB)]
+    API -->|Cache / SSE| Cache[(Redis Cache)]
+    Cache -.->|Real-time Updates| Client
+```
+
+### Data Model (Key Entities)
+- **User:** `id (PK)`, `email`, `password_hash`, `role (student/recruiter)`, `created_at`
+- **StudentProfile:** `id (PK)`, `user_id (FK)`, `first_name`, `last_name`, `skills`, `education`, `resume_url`
+- **JobListing:** `id (PK)`, `recruiter_id (FK)`, `title`, `description`, `required_skills`, `location`, `status`
+- **Application:** `id (PK)`, `job_listing_id (FK)`, `student_id (FK)`, `status`, `submitted_at`
+
+### API Design (Key Endpoints)
+| METHOD | ENDPOINT | DESCRIPTION | REQUEST BODY | RESPONSE |
+|--------|----------|-------------|--------------|----------|
+| POST | `/api/auth/register` | Register new user. | `{{email, password, role}}` | `{{token, user_id}}` |
+| GET | `/api/jobs` | Get filtered job listings. | None (Query params) | `[JobListing]` |
+| POST | `/api/applications` | Apply for a job. | `{{job_id}}` | `{{application_id, status}}` |
+| PATCH | `/api/applications/:id` | Update application status. | `{{status}}` | `{{success: true}}` |
+
+---
+
+## 7. UI/UX Specifications
+
+### Screen Inventory
+- **Landing Page:** Marketing page introducing the portal to students and recruiters.
+- **Student Dashboard:** View match scores, saved jobs, applied jobs, and profile status.
+- **Profile Builder:** Multi-step wizard to input skills, projects, and upload a resume.
+- **Job Search Portal:** Search bar, advanced filters, and detailed job preview panel.
+- **Recruiter Pipeline:** Kanban board representing applicant statuses (New, Screen, Interview, Offer, Rejected).
+
+### Design System Requirements
+- **Typography:** Inter (Primary sans-serif) for high readability. Heading font Outfit for premium aesthetic.
+- **Color Palette:** Sleek HSL dark mode. Primary: Deep Navy `#0F172A`, Accent: Vibrant Cobalt `#2563EB`, Success: Emerald `#10B981`.
+- **Spacing System:** 4px baseline grid (padding/margins: 8px, 16px, 24px, 32px).
+
+### Critical User Flows
+1. **Student Onboarding:** Sign up -> Input Skills -> Complete Profile -> Land on customized Job Search page with match scores.
+2. **Job Application:** Browse listing -> View Match Score -> Click Apply -> SSE notification triggers success -> Application appears in Recruiter Kanban.
+
+---
+
+## 11. Success Metrics & KPIs
+
+- **North Star Metric:** Successful Placement Rate (Number of students hired per month).
+
+### Metric Framework
+| METRIC | BASELINE | MONTH 1 | MONTH 3 | MONTH 6 | MONTH 12 |
+|--------|----------|---------|---------|---------|----------|
+| Active Student Profiles | 0 | 1,000 | 5,000 | 20,000 | 50,000 |
+| Job Listings Posted | 0 | 150 | 600 | 2,500 | 8,000 |
+| Application Submission Rate | 0 | 70% | 75% | 80% | 85% |
+| Monthly Placement Volume | 0 | 50 | 250 | 1,200 | 4,000 |
+
+### Analytics Implementation
+- **Events to Track:** `user_signup`, `profile_completed`, `job_search_executed`, `application_submitted`, `status_changed`.
+- **Funnel Definitions:** Signup -> Profile Completion -> Job Search -> Apply -> Hire.
+- **Dashboard Requirements:** Metabase / Looker Studio dashboard tracking active funnels, latency metrics, and daily match rates."""
 
     def _get_mock_qa(self, idea: str, industry: str) -> str:
-        return f"""## 11. Risk Register
+        return f"""## 8. QA & Testing Strategy
 
-| Risk | Category | Likelihood | Impact | Mitigation |
-|------|----------|------------|--------|------------|
-| Technical Debt | Technical | High | Medium | Regularly review and refactor code to ensure maintainability |
-| Cybersecurity Threats | Security | Medium | High | Implement robust security measures, such as encryption and firewalls |
-| Competition | Market | Medium | High | Continuously monitor competitors and adjust strategy accordingly |
-| User Adoption | User | Medium | Medium | Implement user-friendly onboarding process and provide regular updates and support |
-
----
-
-## 12. Open Questions & Assumptions
-
-* **How will we ensure the quality and accuracy of job listings?:** This is crucial to the success of the app, as users will rely on the accuracy of job listings to make informed decisions. → *Mitigation:* Implement a robust moderation process to review and approve job listings before they are posted.
-* **How will we handle user data and ensure compliance with regulations?:** This is essential to maintaining user trust and avoiding potential legal issues. → *Mitigation:* Implement robust security measures, such as encryption and access controls, and regularly review and update policies to ensure compliance with regulations.
-* **How will we measure the success of the app and make data-driven decisions?:** This is crucial to continuously improving the app and ensuring it meets user needs. → *Mitigation:* Implement analytics tools to track key metrics, such as user acquisition, job listings, and application rate, and regularly review and analyze data to inform decision-making.
+### Testing Types
+- **Unit Testing:** 80% coverage target using Jest/Vitest for frontend helpers and backend controllers.
+- **Integration Testing:** Test API endpoints, Auth0 flow, and Redis-SSE connections using Supertest.
+- **End-to-End (E2E) Testing:** Playwright suites covering Student Onboarding and Recruiter Application Management.
+- **Performance Testing:** Load testing via k6 to verify system response under 2,000 concurrent user streams.
+- **User Acceptance Testing (UAT):** Private beta with 50 students and 5 campus recruiters for feedback loops.
 
 ---
 
-## 13. 3-Month MVP Roadmap
+## 9. Risk Register & Mitigation Plan
 
-| Phase | Weeks | Goal | Key Deliverables |
-|-------|-------|------|------------------|
-| Phase 1 | 1-4 | Develop user profile and job search features | User profile creation, job search functionality, and basic filtering |
-| Phase 2 | 5-8 | Develop job application and notification features | Job application functionality, notification system, and basic analytics |
-| Phase 3 | 9-12 | Develop application tracking and user feedback features | Application tracking functionality, user feedback system, and refined analytics |
-
-### Week-by-week breakdown for Month 1:
-
-| Week | Focus | Specific Deliverables | Done When |
-|------|-------|-----------------------|-----------|
-| Week 1 | User Profile | Develop user profile creation feature | User profile creation is functional and tested |
-| Week 2 | Job Search | Develop job search functionality | Job search is functional and tested |
-| Week 3 | Filtering | Develop basic filtering for job search | Filtering is functional and tested |
-| Week 4 | Testing and Review | Test and review all features developed in Month 1 | All features are functional and tested |
+| RISK | CATEGORY | LIKELIHOOD | IMPACT | MITIGATION STRATEGY | OWNER |
+|------|----------|------------|--------|---------------------|-------|
+| Low Student Engagement | Market | Medium | High | Partner directly with university career centers to mandate registration. | Product Manager |
+| Recruiter Churn | Market | Low | High | Ensure high-quality, pre-screened matches so recruiters find value quickly. | Business Analyst |
+| API Rate Limits (LinkedIn/Indeed APIs) | Technical | High | Medium | Implement Redis caching layers and limit job refresh fetch cycles. | Tech Lead |
+| Privacy Data Breach | Security | Low | Critical | Conduct quarterly third-party security audits and encrypt PII data. | Security Lead |
 
 ---
 
-## 14. 6-Month Stretch Goals
+## 10. Project Build Plan & Roadmap
 
-1. **Integrate with LinkedIn and Indeed:** Integrate the app with LinkedIn and Indeed to fetch job listings and company information, expanding the app's reach and providing more opportunities for users.
-2. **Develop a mobile app:** Develop a mobile app to provide users with a seamless and convenient way to access the app on-the-go, increasing user engagement and retention.
-3. **Implement AI-powered job matching:** Implement AI-powered job matching to provide users with personalized job recommendations, increasing the chances of successful placements and improving user satisfaction.
+### Phased Roadmap
+- **Phase 1: Foundation (Weeks 1-4):** Database schemas, authentication, onboarding flows, and basic profiles.
+- **Phase 2: Core Matching & Listings (Weeks 5-8):** Search index, job listings portal, and matching engine calculation.
+- **Phase 3: Applications & Dashboard (Weeks 9-12):** Apply button flow, recruiter kanban board, and SSE notification system.
+- **Phase 4: Launch & Optimization (Weeks 13-16):** UAT beta testing, performance tuning, and public launch.
 
-These stretch goals will help the app to continue to grow and improve, providing more value to users and increasing its competitiveness in the market."""
+### Week-by-Week Month 1
+- **Week 1:** Set up PostgreSQL database tables and API routing skeleton.
+- **Week 2:** Implement Auth0 login, register flows, and secure session management.
+- **Week 3:** Build frontend Onboarding Wizard and profile editor form.
+- **Week 4:** Unit test onboarding and profile saves; run first mock integration build.
+
+### Team Requirements
+- **1 Product Manager** (Roadmap, specifications, UAT feedback)
+- **1 Lead Engineer** (System architecture, database schema, DevOps setup)
+- **1 Frontend Engineer** (React web application, Tailwind styling, dashboards)
+- **1 Backend Engineer** (Express API, database indexing, Redis pub/sub)
+- **1 QA Automation Engineer** (Playwright test suites, k6 load testing, validation)
+
+---
+
+## 12. Launch Checklist
+
+### Pre-Launch (T-4 weeks)
+- [ ] Complete code freeze and run full Playwright E2E suite.
+- [ ] Conduct vulnerability scan and penetration testing.
+- [ ] Setup production AWS cluster, databases, and backup routines.
+- [ ] Verify university integration partnerships.
+
+### Launch Week
+- [ ] Execute database migrations and deploy production build.
+- [ ] Conduct smoke testing on live production environment.
+- [ ] Enable Metabase and Sentry dashboards for monitoring.
+- [ ] Send welcome emails to pre-registered university students and recruiters.
+
+### Post-Launch (Weeks 1-4)
+- [ ] Monitor error logging and SSE connection drop rates.
+- [ ] Gather feedback from recruiters regarding application quality.
+- [ ] Release weekly bug-fix patches.
+
+---
+
+## Appendix: Open Questions & Decisions Log
+
+| QUESTION | DECISION MADE | RATIONALE | DATE |
+|----------|---------------|-----------|------|
+| Should we allow anonymous job searches? | No. Registration is mandatory to view listings. | Protects proprietary job data and ensures all search activity yields high-intent leads. | 2026-06-20 |
+| Which calendar tool should we support first for scheduling? | Google Calendar. | Over 90% of target students and participating companies use Google Workspace. | 2026-06-22 |
+| How do we handle manual resume uploads? | Parse via standard PDF parsers and index the raw text. | Allows the matching engine to read resume keywords and rank candidates accurately. | 2026-06-23 |"""
 
     def _get_mock_syn(self, idea: str, industry: str) -> str:
-        return f"""# {idea}
+        return f"""# A placement app for university students to grab opportunity from big companies
 ## Product Requirements Document
 
-**Version:** 1.0 | **Status:** Final | **Industry:** {industry}
+**Version:** 1.0 | **Status:** Final | **Industry:** SaaS / Web App
 
 ---
 
 ## Executive Summary
 
-A placement app for university students to grab opportunity from big companies is a web-based platform designed to connect university students with job opportunities at top companies. The app aims to solve the problem of students struggling to find and secure job placements, and companies having difficulty finding the best candidates. With a growing market size of over 20 million university students in the US alone, and a market opportunity estimated to be around $1.5 billion, this app is poised to revolutionize the recruitment process. By providing a dedicated platform for students to showcase their skills and companies to find top talent, this app is well-positioned to capitalize on the shift towards online recruitment and virtual recruitment.
+Provide a high-level summary of the product blueprint using the following bullet points:
+- **Product Vision:** To become the premier platform for A placement app for university students to grab opportunity from big companies, establishing a seamless link between university students and opportunities.
+- **Core Problem:** University students struggle to find and secure job placements, while big companies face high friction and difficulty in filtering the best candidate profiles efficiently.
+- **Our Solution:** A placement app provides a streamlined matching engine, verified candidate credentials, and direct communication channels.
+- **Target Customer:** University students seeking internships/placements and recruiters from big companies.
+- **Business Model:** Premium subscription tiers for employers, premium resume services for students, and success fee commissions.
+- **MVP Launch Target:** 12 weeks.
+- **Success Definition:** 5,000 active university students registered, 50 big companies onboarded, and over 1,000 successful placements in Month 1.
 
 ---
 
-## 1. Problem Statement & Market Opportunity
+## 1. Problem Statement & Opportunity
 
-The specific problem that this product solves is the difficulty university students face in finding and securing job placements with big companies. Currently, students rely on university career fairs, online job boards like LinkedIn and Indeed, and personal networking to find opportunities. However, these methods often result in a high volume of unqualified applicants, making it difficult for students to stand out and for companies to find the best candidates. For example, a computer science student at a top-tier university may have to compete with thousands of other students for a limited number of internship positions at a top tech firm.
+The specific problem that this product solves is the difficulty university students face in finding and securing job placements with big companies. Currently, students rely on university career fairs, online job boards like LinkedIn and Indeed, and personal networking to find opportunities. However, these methods often result in a high volume of unqualified applicants, slow response cycles, and a lack of specific match indicators.
 
-The market size for this problem is significant, with over 20 million university students in the US alone, and a growing number of big companies looking to hire fresh talent. The market opportunity is estimated to be around $1.5 billion, considering the average cost of recruiting a single candidate is around $4,000. Recently, the shift towards online recruitment and the increasing importance of digital presence have made it viable for a dedicated product to address this problem. With the rise of remote work and virtual recruitment, companies are now more open to considering candidates from a wider geographic range, making a placement app an attractive solution.
-
----
-
-## 2. Target Audience
-
-The primary population of people who would use "A placement app for university students to grab opportunity from big companies" are university students aged 18-25, primarily based in urban areas, with a focus on those pursuing degrees in in-demand fields such as computer science, engineering, and business. These students are likely to be digitally savvy, active on social media, and eager to launch their careers with top companies. They are currently using a combination of online job boards, university career services, and personal networking to find job opportunities, but are frustrated with the lack of transparency, personalization, and efficiency in the current recruitment process.
+The market size for this problem is significant, with over 20 million university students in the US alone. The market opportunity is estimated to be around $1.5 billion, considering the average cost of recruiting a single candidate is around $4,000. Recently, the shift towards online recruitment and the increasing importance of digital presence have made it viable for a dedicated product to address this problem.
 
 ---
 
-## 3. User Personas
+## 2. Target User Personas
 
 ### Emily Chen, 21 — Junior majoring in Computer Science, San Francisco
-- **Income:** $1,500
+- **Demographics:** Female, 21, undergraduate student, tech-savvy, lives in shared university housing.
 - **Daily Workflow:** Emily spends several hours a week browsing job boards, attending career fairs, and networking with alumni to find internship opportunities.
-- **Pain Points:** She is frustrated with the lack of personalized job recommendations on platforms like LinkedIn and the difficulty in standing out in a crowded applicant pool.
+- **Pain Points:** Frustrated with the lack of personalized job recommendations on platforms like LinkedIn and the difficulty in standing out in a crowded applicant pool.
 - **Goals:** Emily wants to secure a summer internship at a top tech firm and eventually land a full-time job offer after graduation.
-- **Tech Comfort:** High, prefers using her smartphone for most tasks.
-- **Quote:** "I feel like I'm just throwing my resume into a black hole when I apply for jobs online. I wish there was a way to get my foot in the door and actually talk to people at the companies I'm interested in."
-- **Usage Pattern:** Emily would use the app daily to browse job openings, practice interview skills, and connect with company representatives.
+- **Tech Stack:** High comfort; uses macOS, iOS, GitHub, Slack, and LinkedIn daily.
+- **Budget Authority:** Student budget, highly price-sensitive; willing to pay up to $10/month for premium career tools.
+- **Success Metrics:** Landing at least 3 interviews within 2 weeks of profile completion.
+- **Quote:** "I feel like I'm just throwing my resume into a black hole when I apply for jobs online. I wish there was a way to get my foot in the door."
+- **Usage Pattern:** Daily usage to check match status, application views, and respond to recruiter messages.
 
 ### Rohan Patel, 22 — Senior majoring in Business Administration, New York
-- **Income:** $2,000
+- **Demographics:** Male, 22, graduating senior, highly ambitious, active in student finance societies.
 - **Daily Workflow:** Rohan networks extensively with professionals in his industry, attends career fairs, and applies to job openings on company websites.
-- **Pain Points:** He is frustrated with the lack of transparency in the recruitment process and the difficulty in getting feedback on his applications.
+- **Pain Points:** Lack of transparency in the recruitment process and the difficulty in getting feedback on his applications.
 - **Goals:** Rohan wants to land a full-time job at a top investment bank or consulting firm after graduation.
-- **Tech Comfort:** Medium.
+- **Tech Stack:** Medium comfort; uses Windows, iOS, MS Office, and LinkedIn.
+- **Budget Authority:** Moderate; willing to invest $50 for a professional resume review.
+- **Success Metrics:** Receiving direct inquiries from at least 2 big companies.
 - **Quote:** "I want to apply to companies where I know my profile matches what they want. Traditional portals don't show the match percentage."
 - **Usage Pattern:** Browses weekly, submits 2-3 applications a day.
 
----
-
-## 4. Competitive Analysis
-
-| Competitor | Strengths | Weaknesses | Our Advantage |
-|-----------|-----------|------------|---------------|
-| LinkedIn | Large user base, established brand | Limited personalization, high competition | Personalized job recommendations, simplified application process |
-| Indeed | Comprehensive job listings, user-friendly interface | Limited company information, high volume of unqualified applicants | Company profiles, tailored job matching |
-| Glassdoor | Valuable company insights, user reviews | Limited job listings, focus on company culture rather than job matching | Job listings, company information, and user reviews in one platform |
-
----
-
-## 5. Unique Value Proposition
-
-A placement app for university students to grab opportunity from big companies offers a unique value proposition by providing personalized job recommendations, company profiles, and a simplified application process. This app fills the gap in the current recruitment process by providing a dedicated platform for students to showcase their skills and companies to find top talent. By leveraging machine learning algorithms and natural language processing, the app can match students with job openings that fit their skills and interests, increasing the chances of successful placements.
+### Sarah Jenkins, 28 — Campus Recruiter at a Tech Giant, Seattle
+- **Demographics:** Female, 28, corporate recruiter, busy schedule, travels for university events.
+- **Daily Workflow:** Sarah reviews thousands of resumes, coordinates with university career centers, and conducts initial screening interviews.
+- **Pain Points:** Overwhelmed by low-quality, generic resume submissions and manual scheduling overhead.
+- **Goals:** Quickly identify top-tier talent matching specific engineering benchmarks and reduce time-to-hire.
+- **Tech Stack:** High comfort; uses Workday ATS, Slack, Zoom, and Outlook.
+- **Budget Authority:** Corporate department budget; authorized up to $5,000/year for recruiting platform licenses.
+- **Success Metrics:** Reducing candidate screening time by 40% and increasing interview-to-offer conversion rate.
+- **Quote:** "I need a way to filter candidates by actual verified skills and project portfolios, not just their GPA or school name."
+- **Usage Pattern:** Active daily during peak recruiting seasons (Fall/Spring), spending 3-4 hours per day on the portal.
 
 ---
 
-## 6. System Architecture
-
-A placement app for university students to grab opportunity from big companies will have a web-based client, a backend API, and a database to store user information, company profiles, and job listings. The app will utilize a microservices architecture, with separate services for user authentication, job matching, and company profiles. The app will also integrate with external services such as LinkedIn and Indeed to fetch job listings and company information.
-
-```mermaid
-flowchart LR
-    Student(["👤 Student"]) --> WebUI["Frontend Portal"]
-    Recruiter(["🏢 Recruiter"]) --> WebUI
-    WebUI --> API["API Gateway"]
-    API --> Auth["Auth Service"]
-    API --> JobService["Job Match Engine"]
-    JobService --> DB[("Database")]
-```
-
----
-
-## 7. Prioritized User Stories
+## 3. Prioritized User Stories
 
 ### Must-Have (Core Loop)
 *Without these, the product does not work.*
-
-1. **As a university student**, I want to create a profile showcasing my skills, education, and experience, so that I can increase my visibility to potential employers.
-   > **AC:** Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers.
-2. **As a university student**, I want to browse and search for job listings from big companies, so that I can find opportunities that match my skills and interests.
-   > **AC:** Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details.
-3. **As a university student**, I want to apply for job listings directly through the app, so that I can easily submit my application and resume.
-   > **AC:** Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer.
-4. **As a university student**, I want to receive notifications about new job listings that match my profile and preferences, so that I can stay up-to-date on new opportunities.
-   > **AC:** Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details.
-5. **As a university student**, I want to track the status of my job applications, so that I can stay organized and follow up with employers.
-   > **AC:** Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled").
+- **As a university student**, I want to create a profile showcasing my skills and projects, so that I can make my profile visible to employers.
+  > **AC:** Given I am a registered student, When I save my profile with valid fields, Then the profile is stored and visible to recruiter searches.
+- **As a university student**, I want to search and filter job listings, so that I can find matching placements.
+  > **AC:** Given I am on the job search page, When I input a search keyword or select a filter, Then the system returns filtered job listings within 500ms.
+- **As a university student**, I want to submit job applications directly, so that I can apply to big companies instantly.
+  > **AC:** Given I view a job listing, When I click "Apply", Then my profile data is sent to the company's recruiter and status changes to "Submitted".
+- **As a recruiter**, I want to view candidate applications and update their status, so that I can manage my hiring pipeline.
+  > **AC:** Given I am logged in as a recruiter, When I view a candidate, Then I can change their status (e.g. Under Review, Interview, Rejected).
 
 ### Should-Have
 *Significantly improves the experience.*
-
-6. **As a university student**, I want to receive personalized job recommendations based on my profile and search history, so that I can discover new opportunities that are tailored to my interests.
-   > **AC:** Given I am a registered user, When I log in, Then I see a list of recommended job listings that match my profile and search history.
-7. **As a university student**, I want to be able to filter job listings by location, industry, and job type, so that I can narrow down my search results to relevant opportunities.
-   > **AC:** Given I am a registered user, When I use the filter function, Then I see a list of job listings that match my selected criteria.
-8. **As a university student**, I want to be able to save job listings for later, so that I can come back to them and apply when I'm ready.
-   > **AC:** Given I am a registered user, When I click the "Save" button on a job listing, Then the job listing is added to my saved jobs list.
+- **As a university student**, I want to see a compatibility match score for each listing, so that I can prioritize where to apply.
+  > **AC:** Given I view job listings, When my profile has completed skills, Then each job displays a match percentage (e.g., 85% match).
+- **As a recruiter**, I want to schedule interviews directly through the app, so that I don't have to coordinate via email.
+  > **AC:** Given a candidate is moved to "Interview", When I click "Schedule", Then the system integrates with calendar availability.
 
 ### Could-Have
 *Defer if needed.*
+- **As a university student**, I want to get suggestions to improve my resume, so that I can increase my interview chances.
+  > **AC:** Given my profile is incomplete, When I request tips, Then the app highlights missing keywords based on popular job listings.
 
-9. **As a university student**, I want to be able to connect with other students and professionals in my industry, so that I can build my network and learn about new opportunities.
-   > **AC:** Given I am a registered user, When I join a group or community, Then I can see posts and discussions from other members and engage with them.
-10. **As a university student**, I want to be able to access resources and tips for improving my resume and interview skills, so that I can increase my chances of getting hired.
-    > **AC:** Given I am a registered user, When I access the resources section, Then I see a list of articles, videos, and tips on resume building and interview prep.
-
----
-
-## 8. Functional Requirements
-
-| ID | Feature Area | Description | Acceptance Criteria | Priority |
-|----|-------------|-------------|---------------------|----------|
-| 1 | User Profile | Create and manage user profiles | Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers | P0 |
-| 2 | Job Search | Search and filter job listings | Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details | P0 |
-| 3 | Job Application | Apply for job listings directly through the app | Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer | P0 |
-| 4 | Notifications | Receive notifications about new job listings | Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details | P0 |
-| 5 | Application Tracking | Track the status of job applications | Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled") | P0 |
-
-**Priority:** P0 = must have at launch, P1 = first 30 days post-launch, P2 = future
+### Won't-Have (MVP Exclusions)
+- **Automatic Background Verification:** Automated background checks for candidates will be excluded for the initial release to reduce complexity, relying on university-provided graduation lists instead.
 
 ---
 
-## 9. Non-Functional Requirements
+## 4. Functional Requirements
 
-| Category | Requirement | Target | Notes |
-|----------|-------------|--------|-------|
-| Performance | Page load time | 2 seconds | Measure using Google PageSpeed Insights |
-| Scalability | Handle concurrent users | 10,000 concurrent users | Use load testing tools to ensure scalability |
-| Security | Protect user data | 128-bit SSL encryption | Use HTTPS protocol to ensure secure data transmission |
-| Compliance | Data privacy laws | Comply with GDPR and CCPA regulations | Ensure user data is handled in accordance with regulations |
-| Availability | Uptime SLA | Ensure 99.9% uptime | Use monitoring tools to detect and respond to downtime |
-| Accessibility | WCAG compliance | Follow WCAG 2.1 guidelines | Use accessibility testing tools to identify and fix issues |
-
----
-
-## 10. Success Metrics & KPIs
-
-| Metric | What It Measures | Month 1 Target | Month 6 Target | Month 12 Target |
-|--------|-----------------|----------------|----------------|-----------------|
-| User Acquisition | Number of registered users | 1,000 | 10,000 | 50,000 |
-| Job Listings | Number of job listings | 100 | 1,000 | 5,000 |
-| Application Rate | Number of job applications | 50 | 500 | 2,000 |
-| Placement Rate | Number of successful placements | 10 | 100 | 500 |
-
-**North Star Metric:** Placement Rate (number of successful placements)
+| ID | FEATURE | USER STORY REF | DETAILED DESCRIPTION | ACCEPTANCE CRITERIA | PRIORITY | EST. EFFORT |
+|----|---------|----------------|----------------------|---------------------|----------|-------------|
+| FR-101 | Profile Creator | US-101 | Allows students to enter education, projects, skills, and upload resumes. | Fields validated, saved, and searchable. | High | 3 days |
+| FR-102 | Job Listing Search | US-102 | Index and search job listings by title, skills, location, and salary. | Search query returns relevant items within 500ms. | High | 4 days |
+| FR-103 | One-Click Apply | US-103 | Package profile details and send them as an application to the recruiter. | Application status updated in real-time. | High | 2 days |
+| FR-104 | Match Engine | US-105 | Algorithm comparing candidate skills with job requirements to calculate % match. | Score displays dynamically on job card. | Medium | 5 days |
+| FR-105 | Recruiter Dashboard | US-104 | Interface for recruiters to view, sort, and change status of applicants. | Pipeline kanban or list view updates instantly. | High | 4 days |
 
 ---
 
-## 11. Risk Register
+## 5. Non-Functional Requirements
 
-| Risk | Category | Likelihood | Impact | Mitigation |
-|------|----------|------------|--------|------------|
-| Technical Debt | Technical | High | Medium | Regularly review and refactor code to ensure maintainability |
-| Cybersecurity Threats | Security | Medium | High | Implement robust security measures, such as encryption and firewalls |
-| Competition | Market | Medium | High | Continuously monitor competitors and adjust strategy accordingly |
-| User Adoption | User | Medium | Medium | Implement user-friendly onboarding process and provide regular updates and support |
+### Performance SLAs
+| METRIC | REQUIREMENT | MEASUREMENT METHOD |
+|--------|-------------|--------------------|
+| Page Load Time | < 2.0 seconds for landing page, < 1.0 second for dashboard. | Lighthouse Audits & Web Vitals. |
+| Search API Latency | Median latency < 300ms under load. | Server logs and APM tracing. |
+| Data Sync Delay | Real-time SSE updates within 200ms. | End-to-end telemetry. |
 
----
+### Security & Compliance
+| REQUIREMENT | STANDARD | IMPLEMENTATION |
+|-------------|----------|----------------|
+| Data Encryption | AES-256 at rest, TLS 1.3 in transit. | HTTPS setup & AWS KMS managed keys. |
+| Authentication | OAuth 2.0 with JWT. | Auth0 integration & session token storage. |
+| Compliance | GDPR and CCPA. | Consent dialogs, data export, and deletion workflows. |
 
-## 12. Open Questions & Assumptions
-
-* **How will we ensure the quality and accuracy of job listings?:** This is crucial to the success of the app, as users will rely on the accuracy of job listings to make informed decisions. → *Mitigation:* Implement a robust moderation process to review and approve job listings before they are posted.
-* **How will we handle user data and ensure compliance with regulations?:** This is essential to maintaining user trust and avoiding potential legal issues. → *Mitigation:* Implement robust security measures, such as encryption and access controls, and regularly review and update policies to ensure compliance with regulations.
-* **How will we measure the success of the app and make data-driven decisions?:** This is crucial to continuously improving the app and ensuring it meets user needs. → *Mitigation:* Implement analytics tools to track key metrics, such as user acquisition, job listings, and application rate, and regularly review and analyze data to inform decision-making.
-
----
-
-## 13. 3-Month MVP Roadmap
-
-| Phase | Weeks | Goal | Key Deliverables |
-|-------|-------|------|------------------|
-| Phase 1 | 1-4 | Develop user profile and job search features | User profile creation, job search functionality, and basic filtering |
-| Phase 2 | 5-8 | Develop job application and notification features | Job application functionality, notification system, and basic analytics |
-| Phase 3 | 9-12 | Develop application tracking and user feedback features | Application tracking functionality, user feedback system, and refined analytics |
-
-### Week-by-week breakdown for Month 1:
-
-| Week | Focus | Specific Deliverables | Done When |
-|------|-------|-----------------------|-----------|
-| Week 1 | User Profile | Develop user profile creation feature | User profile creation is functional and tested |
-| Week 2 | Job Search | Develop job search functionality | Job search is functional and tested |
-| Week 3 | Filtering | Develop basic filtering for job search | Filtering is functional and tested |
-| Week 4 | Testing and Review | Test and review all features developed in Month 1 | All features are functional and tested |
+### Scalability Plan
+- **Phase 1 (0-1K users):** Single database instance, server cache, standard backend deployment.
+- **Phase 2 (1K-10K users):** Read replicas for database, horizontally scaled backend pods with load balancer.
+- **Phase 3 (10K+ users):** Microservices migration, Redis caching cluster, Elasticsearch cluster for search.
 
 ---
 
-## 14. 6-Month Stretch Goals
+## 6. Technical Architecture
 
-1. **Integrate with LinkedIn and Indeed:** Integrate the app with LinkedIn and Indeed to fetch job listings and company information, expanding the app's reach and providing more opportunities for users.
-2. **Develop a mobile app:** Develop a mobile app to provide users with a seamless and convenient way to access the app on-the-go, increasing user engagement and retention.
-3. **Implement AI-powered job matching:** Implement AI-powered job matching to provide users with personalized job recommendations, increasing the chances of successful placements and improving user satisfaction.
+### Recommended Tech Stack
+| LAYER | TECHNOLOGY | JUSTIFICATION |
+|-------|------------|---------------|
+| Frontend | React.js, Tailwind CSS | Rapid UI development, responsive component rendering. |
+| Backend | Node.js / Express | Non-blocking I/O, ideal for streaming updates and REST APIs. |
+| Database | PostgreSQL | Relational integrity for user profiles, applications, and job listings. |
+| Cache & SSE | Redis | Session state management and SSE message pub/sub. |
+| Hosting | AWS (ECS / RDS) | Enterprise security, reliable backups, and automatic scaling. |
 
-These stretch goals will help the app to continue to grow and improve, providing more value to users and increasing its competitiveness in the market.
+### System Architecture Overview
+A placement app for university students to grab opportunity from big companies is built on a modern decoupled architecture. The React frontend interacts with the Express backend via REST endpoints and maintains an SSE connection for instant status updates.
+
+```mermaid
+flowchart TD
+    Client[React Web App] -->|HTTPS Requests| API[Express API Gateway]
+    API -->|Authenticate| Auth[Auth0 Provider]
+    API -->|Read/Write| DB[(PostgreSQL DB)]
+    API -->|Cache / SSE| Cache[(Redis Cache)]
+    Cache -.->|Real-time Updates| Client
+```
+
+### Data Model (Key Entities)
+- **User:** `id (PK)`, `email`, `password_hash`, `role (student/recruiter)`, `created_at`
+- **StudentProfile:** `id (PK)`, `user_id (FK)`, `first_name`, `last_name`, `skills`, `education`, `resume_url`
+- **JobListing:** `id (PK)`, `recruiter_id (FK)`, `title`, `description`, `required_skills`, `location`, `status`
+- **Application:** `id (PK)`, `job_listing_id (FK)`, `student_id (FK)`, `status`, `submitted_at`
+
+### API Design (Key Endpoints)
+| METHOD | ENDPOINT | DESCRIPTION | REQUEST BODY | RESPONSE |
+|--------|----------|-------------|--------------|----------|
+| POST | `/api/auth/register` | Register new user. | `{{email, password, role}}` | `{{token, user_id}}` |
+| GET | `/api/jobs` | Get filtered job listings. | None (Query params) | `[JobListing]` |
+| POST | `/api/applications` | Apply for a job. | `{{job_id}}` | `{{application_id, status}}` |
+| PATCH | `/api/applications/:id` | Update application status. | `{{status}}` | `{{success: true}}` |
+
+---
+
+## 7. UI/UX Specifications
+
+### Screen Inventory
+- **Landing Page:** Marketing page introducing the portal to students and recruiters.
+- **Student Dashboard:** View match scores, saved jobs, applied jobs, and profile status.
+- **Profile Builder:** Multi-step wizard to input skills, projects, and upload a resume.
+- **Job Search Portal:** Search bar, advanced filters, and detailed job preview panel.
+- **Recruiter Pipeline:** Kanban board representing applicant statuses (New, Screen, Interview, Offer, Rejected).
+
+### Design System Requirements
+- **Typography:** Inter (Primary sans-serif) for high readability. Heading font Outfit for premium aesthetic.
+- **Color Palette:** Sleek HSL dark mode. Primary: Deep Navy `#0F172A`, Accent: Vibrant Cobalt `#2563EB`, Success: Emerald `#10B981`.
+- **Spacing System:** 4px baseline grid (padding/margins: 8px, 16px, 24px, 32px).
+
+### Critical User Flows
+1. **Student Onboarding:** Sign up -> Input Skills -> Complete Profile -> Land on customized Job Search page with match scores.
+2. **Job Application:** Browse listing -> View Match Score -> Click Apply -> SSE notification triggers success -> Application appears in Recruiter Kanban.
+
+---
+
+## 8. QA & Testing Strategy
+
+### Testing Types
+- **Unit Testing:** 80% coverage target using Jest/Vitest for frontend helpers and backend controllers.
+- **Integration Testing:** Test API endpoints, Auth0 flow, and Redis-SSE connections using Supertest.
+- **End-to-End (E2E) Testing:** Playwright suites covering Student Onboarding and Recruiter Application Management.
+- **Performance Testing:** Load testing via k6 to verify system response under 2,000 concurrent user streams.
+- **User Acceptance Testing (UAT):** Private beta with 50 students and 5 campus recruiters for feedback loops.
+
+---
+
+## 9. Risk Register & Mitigation Plan
+
+| RISK | CATEGORY | LIKELIHOOD | IMPACT | MITIGATION STRATEGY | OWNER |
+|------|----------|------------|--------|---------------------|-------|
+| Low Student Engagement | Market | Medium | High | Partner directly with university career centers to mandate registration. | Product Manager |
+| Recruiter Churn | Market | Low | High | Ensure high-quality, pre-screened matches so recruiters find value quickly. | Business Analyst |
+| API Rate Limits (LinkedIn/Indeed APIs) | Technical | High | Medium | Implement Redis caching layers and limit job refresh fetch cycles. | Tech Lead |
+| Privacy Data Breach | Security | Low | Critical | Conduct quarterly third-party security audits and encrypt PII data. | Security Lead |
+
+---
+
+## 10. Project Build Plan & Roadmap
+
+### Phased Roadmap
+- **Phase 1: Foundation (Weeks 1-4):** Database schemas, authentication, onboarding flows, and basic profiles.
+- **Phase 2: Core Matching & Listings (Weeks 5-8):** Search index, job listings portal, and matching engine calculation.
+- **Phase 3: Applications & Dashboard (Weeks 9-12):** Apply button flow, recruiter kanban board, and SSE notification system.
+- **Phase 4: Launch & Optimization (Weeks 13-16):** UAT beta testing, performance tuning, and public launch.
+
+### Week-by-Week Month 1
+- **Week 1:** Set up PostgreSQL database tables and API routing skeleton.
+- **Week 2:** Implement Auth0 login, register flows, and secure session management.
+- **Week 3:** Build frontend Onboarding Wizard and profile editor form.
+- **Week 4:** Unit test onboarding and profile saves; run first mock integration build.
+
+### Team Requirements
+- **1 Product Manager** (Roadmap, specifications, UAT feedback)
+- **1 Lead Engineer** (System architecture, database schema, DevOps setup)
+- **1 Frontend Engineer** (React web application, Tailwind styling, dashboards)
+- **1 Backend Engineer** (Express API, database indexing, Redis pub/sub)
+- **1 QA Automation Engineer** (Playwright test suites, k6 load testing, validation)
+
+---
+
+## 12. Launch Checklist
+
+### Pre-Launch (T-4 weeks)
+- [ ] Complete code freeze and run full Playwright E2E suite.
+- [ ] Conduct vulnerability scan and penetration testing.
+- [ ] Setup production AWS cluster, databases, and backup routines.
+- [ ] Verify university integration partnerships.
+
+### Launch Week
+- [ ] Execute database migrations and deploy production build.
+- [ ] Conduct smoke testing on live production environment.
+- [ ] Enable Metabase and Sentry dashboards for monitoring.
+- [ ] Send welcome emails to pre-registered university students and recruiters.
+
+### Post-Launch (Weeks 1-4)
+- [ ] Monitor error logging and SSE connection drop rates.
+- [ ] Gather feedback from recruiters regarding application quality.
+- [ ] Release weekly bug-fix patches.
+
+---
+
+## Appendix: Open Questions & Decisions Log
+
+| QUESTION | DECISION MADE | RATIONALE | DATE |
+|----------|---------------|-----------|------|
+| Should we allow anonymous job searches? | No. Registration is mandatory to view listings. | Protects proprietary job data and ensures all search activity yields high-intent leads. | 2026-06-20 |
+| Which calendar tool should we support first for scheduling? | Google Calendar. | Over 90% of target students and participating companies use Google Workspace. | 2026-06-22 |
+| How do we handle manual resume uploads? | Parse via standard PDF parsers and index the raw text. | Allows the matching engine to read resume keywords and rank candidates accurately. | 2026-06-23 |
 
 ---
 

@@ -36,98 +36,65 @@ Produce the following sections. Everything must describe features of "{user_idea
 
 ---
 
-## 6. System Architecture
+## 3. Prioritized User Stories (MoSCoW)
 
-Write one paragraph describing the technical architecture of "{user_idea}": what type of clients (web/mobile), what backend, what databases, what key external services.
+Write 8–12 user stories prioritized using MoSCoW.
+Every story must describe a real action inside "{user_idea}". Format each story as:
+"**As a** [specific user type from personas], **I want to** [perform a specific action in "{user_idea}"], **so that** [specific benefit].
+* **Acceptance Criteria:** Given [context], When [user action], Then [system outcome]."
 
-Then produce a Mermaid flowchart. Name every node after the actual components of "{user_idea}" — for example, a placement app might have nodes named "Placement Portal", "Job Match Service", "Resume Storage", "Company API". Do NOT use generic labels like "Core Service" or "Frontend App". Build the diagram from the product's real architecture.
-
-```mermaid
-flowchart LR
-    [build the diagram here with product-specific node names]
-```
-
----
-
-## 7. Prioritized User Stories
-
-Write 10–15 user stories using the format:
-"As a [specific persona type from the BA analysis], I want to [perform a specific action in {user_idea}], so that [specific outcome or benefit]."
-
-**Must-Have (core loop — without these the product doesn't work):**
-At least 5 stories covering the primary user flow end-to-end in {user_idea}.
-
-**Should-Have (significantly improves experience):**
-At least 3 stories for important but non-blocking features.
-
-**Could-Have (nice to have, defer if needed):**
-2–3 stories for enhancements.
-
-For each story, include Acceptance Criteria:
-- Given [specific context in {user_idea}], When [specific user action], Then [specific system behavior or outcome]
-
-CRITICAL: Every story must describe a real action inside {user_idea}. Never reuse generic stories that could apply to any app.
+Divide them into:
+* **Must Have (Sprint 1-2):** Core loop features required for launch.
+* **Should Have (Sprint 3-4):** Important but non-blocking features.
+* **Could Have (Post-MVP):** Nice-to-have features or future ideas.
+* **Won't Have (MVP Exclusions):** Excluded features with brief justification.
 
 ---
 
-## 8. Functional Requirements
+## 4. Functional Requirements
 
-List 10–15 functional requirements as a table:
+Produce a detailed table listing functional requirements for the core loops and flows.
+The table must contain: ID, FEATURE, USER STORY REF (e.g., US-101), DETAILED DESCRIPTION, ACCEPTANCE CRITERIA, PRIORITY (High/Medium/Low), EST. EFFORT (e.g., 2 days).
 
-| ID | Feature Area | Description | Acceptance Criteria | Priority |
-|----|-------------|-------------|---------------------|----------|
-
-Requirements must cover the areas relevant to {user_idea}:
-- Core product actions (what users primarily DO in this product day to day)
-- Data management (what information is stored, retrieved, updated)
-- User authentication and account management
-- Search, filter, or discovery features (if applicable to this product)
-- Notifications or communication features (if applicable)
-- Transaction or payment flows (if applicable)
-- Moderation or admin capabilities (if applicable)
-
-CRITICAL: Every requirement must describe a feature of "{user_idea}". Do NOT describe the AI pipeline, SSE streaming, ChromaDB, Ollama, or any internal tool infrastructure. Those are implementation details of the generator, not the product.
+| ID | FEATURE | USER STORY REF | DETAILED DESCRIPTION | ACCEPTANCE CRITERIA | PRIORITY | EST. EFFORT |
+|---|---|---|---|---|---|---|
 
 ---
 
-## 9. Non-Functional Requirements
+## 5. Non-Functional Requirements
 
-Cover all of the following for {user_idea} specifically:
-
-**Performance:** What are the load time and response time requirements? How many concurrent users should the MVP support? Are there any real-time requirements specific to this product type?
-
-**Scalability:** What is the realistic user growth trajectory for this product? What data volumes should the system handle at launch vs. 6 months vs. 12 months?
-
-**Security:** What authentication method is appropriate? What sensitive data does this product handle (location, payment, personal identity, messages, etc.) and how must it be protected?
-
-**Compliance:** What laws and regulations apply to {user_idea} in its target geography? Consider: data privacy laws (GDPR, IT Act, CCPA), industry-specific regulations, age verification requirements, financial regulations (if payments are involved).
-
-**Availability:** What uptime SLA is required? Are there peak usage patterns to plan for?
-
-**Accessibility:** What WCAG level is targeted? What device and browser support is required at launch?
+Provide detailed requirements and standards under three specific subheadings:
+* **Performance SLAs:** A table with columns (METRIC, REQUIREMENT, MEASUREMENT METHOD) detailing page load, search/processing times, and booking/transaction times.
+* **Security & Compliance:** A table with columns (REQUIREMENT, STANDARD, IMPLEMENTATION) detailing encryption standard, authentication method, and data compliance strategy.
+* **Scalability Plan:** A phased scaling strategy for users and database architecture (e.g. Phase 1: 0-1K users, Phase 2: 1K-10K users, Phase 3: 10K+ users).
 
 ---
 
-## 10. Success Metrics & KPIs
+## 6. Technical Architecture
 
-Define measurable success for {user_idea} across all five stages. Every metric must be relevant to this specific product type.
+Define the blueprint's technical layers and integration contracts:
+* **Recommended Tech Stack:** A table detailing (LAYER, TECHNOLOGY, JUSTIFICATION) for Frontend, Backend, Database, Cache, Search, Auth, Hosting, and CI/CD.
+* **System Architecture Overview:** Briefly describe the backend/client interactions and provide an ASCII text diagram or Mermaid diagram detailing the flow of request to database.
+* **Data Model (Key Entities):** List key database tables and their fields (e.g., User, Booking, etc.).
+* **API Design (Key Endpoints):** A table with columns (METHOD, ENDPOINT, DESCRIPTION, REQUEST BODY, RESPONSE) mapping the main routes of "{user_idea}".
 
-**Acquisition:** How do we know users are discovering and signing up?
-Include: sign-up conversion rate, primary acquisition channel, CAC target
+---
 
-**Activation:** How do we know users completed their first meaningful action in {user_idea}?
-Define what "activated" means specifically for this product (e.g., first match made, first listing posted, first purchase, first date booked) and the target rate.
+## 7. UI/UX Specifications
 
-**Retention:** How do we know users come back?
-Include: D7 retention target, D30 retention target, WAU/MAU ratio target
+Outline the interface rules:
+* **Screen Inventory:** List the core pages/screens needed for this product.
+* **Design System Requirements:** Define rules for Typography, Color Palette, and Spacing System.
+* **Critical User Flows:** Explain the top 2-3 interactive flows step-by-step.
 
-**Revenue:** How does {user_idea} make money and what are the Month 3 and Month 12 targets?
-Include: primary revenue model, price point, MRR or GMV target
+---
 
-**Satisfaction:** How do we measure user happiness?
-Include: NPS target, app store rating target, primary feedback channel
+## 11. Success Metrics & KPIs
 
-All metrics must have specific target numbers — not "X%" or "TBD"."""
+Define the metrics that matter most for this specific type of product:
+* **North Star Metric:** The single most important measurement of success for "{user_idea}".
+* **Metric Framework:** A table with columns (METRIC, BASELINE, MONTH 1, MONTH 3, MONTH 6, MONTH 12) detailing specific targets.
+* **Analytics Implementation:** Outline events to track, funnel definitions, and dashboard requirements."""
 
         for chunk in groq_client.generate_stream(
             prompt=prompt,

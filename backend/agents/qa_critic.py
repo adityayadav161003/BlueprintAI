@@ -33,62 +33,47 @@ PM OUTPUT TO REVIEW:
 
 ---
 
-## 11. Risk Register
+## 8. QA & Testing Strategy
 
-Identify 5–8 risks that are SPECIFIC to "{user_idea}" and its operating context.
-
-| Risk | Category | Likelihood (H/M/L) | Impact (H/M/L) | Mitigation Strategy |
-|------|----------|--------------------|----------------|---------------------|
-
-Risk categories to consider for this specific product:
-- Market risks (competition timing, adoption barriers specific to this product)
-- Technical risks (specific to what this product needs to do — real-time features, data sensitivity, scale)
-- Legal/compliance risks (specific to this product's domain and geography)
-- Operational/safety risks (trust, fraud, safety concerns specific to this product type)
-- Financial risks (pricing model viability, unit economics specific to this business model)
-
-Every risk must be something a founder building "{user_idea}" would genuinely worry about. No generic project management risks.
+Outline a targeted testing approach for "{user_idea}"'s core user flows:
+* **Testing Types:** Brief strategy for Unit Testing, Integration Testing, E2E Testing, Performance Testing, and User Acceptance Testing (UAT) specific to this product.
+* **Flow Coverage:** Detail test coverage targets (e.g. 80% coverage using Jest, 50% integration testing).
 
 ---
 
-## 12. Open Questions & Assumptions
+## 9. Risk Register & Mitigation Plan
 
-List 5–8 things currently unknown or assumed that could significantly affect the direction of "{user_idea}".
+Identify 3–5 risks that are SPECIFIC to "{user_idea}" and its operating context. Include owners for each mitigation.
 
-Format each as:
-**[Assumption or Question]:** [Why it matters for this product specifically] → [How to resolve it — specific action, not "do research"]
-
-Cover areas relevant to this product:
-- User behavior assumptions that need validation with real users
-- Business model decisions not yet finalized
-- Regulatory or legal questions specific to this product's market
-- Technical feasibility unknowns for the key features
-- Partnership or integration dependencies this product relies on
-- Safety or trust mechanisms that need further design
+| RISK | CATEGORY | LIKELIHOOD (High/Medium/Low) | IMPACT (High/Medium/Low) | MITIGATION STRATEGY | OWNER |
+|------|----------|------------|--------|---------------------|-------|
 
 ---
 
-## 13. 3-Month MVP Roadmap
+## 10. Project Build Plan & Roadmap
 
-Define a phased roadmap for a small engineering team (2-4 developers) to build the Must-Have user stories and functional requirements.
-
-| Phase | Weeks | Goal | Key Deliverables |
-|-------|-------|------|------------------|
-
-Provide a detailed week-by-week breakdown for Month 1:
-
-| Week | Focus | Specific Deliverables | Done When |
-|------|-------|-----------------------|-----------|
+Define a phased timeline for building the MVP:
+* **Phased Roadmap:** Divide the plan into 4 clear phases (e.g. Phase 1: Foundation (W1-4), Phase 2: Core Features (W5-8), Phase 3: Beta & Polish (W9-12), Phase 4: Launch & Growth (W13-16)).
+* **Week-by-Week Month 1:** List targets for Week 1, 2, 3, and 4.
+* **Team Requirements:** List the suggested staff (e.g. 2 frontend developers, 2 backend developers, 1 QA engineer, 1 PM).
 
 ---
 
-## 14. 6-Month Stretch Goals
+## 12. Launch Checklist
 
-List three specific expansion ideas for "{user_idea}" after the MVP is proven. Each must be a natural next step for THIS product type.
+List specific tasks divided by launch timeline:
+* **Pre-Launch (T-4 weeks):** Tasks like code freeze, user testing, and marketing setups.
+* **Launch Week:** Deployment checks and live monitoring.
+* **Post-Launch (Week 1-4):** Feedback gathering and analytics checks.
 
-1. **[Expansion name]:** [What it is and why it fits this product after MVP]
-2. **[Expansion name]:** [Same format]
-3. **[Expansion name]:** [Same format]"""
+---
+
+## Appendix: Open Questions & Decisions Log
+
+List open questions or assumptions in a tabular log:
+
+| QUESTION | DECISION MADE | RATIONALE | DATE |
+|----------|---------------|-----------|------|"""
 
         for chunk in groq_client.generate_stream(
             prompt=prompt,
