@@ -35,7 +35,13 @@ Produce the following sections. Every section must be entirely specific to "{use
 
 ---
 
-## Section 1: Problem Statement & Market Opportunity
+## Executive Summary
+
+Write 3–4 sentences summarizing what "{user_idea}" is, who it is for, the specific problem it solves, and why now is the right time.
+
+---
+
+## 1. Problem Statement & Market Opportunity
 
 Answer all of the following specifically for "{user_idea}":
 - What specific problem does this product solve? Describe it in concrete terms with real examples.
@@ -45,13 +51,13 @@ Answer all of the following specifically for "{user_idea}":
 
 ---
 
-## Section 2: Target Audience Overview
+## 2. Target Audience
 
 In one focused paragraph, describe the primary population of people who would use "{user_idea}". Be specific: their age range, lifestyle, situation, geography (city/country), and what characteristic makes them the right audience for this product. This must be a description of real people who would actually use this specific product.
 
 ---
 
-## Section 3: User Personas
+## 3. User Personas
 
 Write 3–5 user personas. Each persona must be a realistic, specific user of "{user_idea}" — not a generic business user.
 
@@ -66,7 +72,7 @@ For each persona provide:
 
 ---
 
-## Section 4: Competitive Analysis
+## 4. Competitive Analysis
 
 Identify 3–5 REAL, named competitors or substitutes in the market for "{user_idea}".
 
@@ -85,7 +91,7 @@ Do NOT invent fake competitor names under any circumstances.
 
 ---
 
-## Section 5: Unique Value Proposition
+## 5. Unique Value Proposition
 
 In 2–3 sentences, state exactly what makes "{user_idea}" different and why users would choose it over the alternatives listed above. Be specific — reference the actual competitors and the actual gap this product fills. Do not use generic phrases like "best in class" or "seamless experience"."""
 

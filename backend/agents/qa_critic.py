@@ -23,7 +23,7 @@ ABSOLUTE PROHIBITIONS:
 
 QUALITY GATE: For every risk, ask: "Could this exact risk appear unchanged in a PRD for a completely different type of product?" If yes, make it specific to {user_idea}."""
 
-        prompt = f"""You are a senior QA Engineer and Risk Analyst. Review the PM output and produce Sections 10–12 for:
+        prompt = f"""You are a senior QA Engineer and Risk Analyst. Review the PM output and produce the following sections. Everything must describe features of "{user_idea}" only.
 
 PRODUCT: {user_idea}
 INDUSTRY: {industry}
@@ -33,7 +33,7 @@ PM OUTPUT TO REVIEW:
 
 ---
 
-## Section 10: Risk Register
+## 11. Risk Register
 
 Identify 5–8 risks that are SPECIFIC to "{user_idea}" and its operating context.
 
@@ -51,7 +51,7 @@ Every risk must be something a founder building "{user_idea}" would genuinely wo
 
 ---
 
-## Section 11: Open Questions & Assumptions
+## 12. Open Questions & Assumptions
 
 List 5–8 things currently unknown or assumed that could significantly affect the direction of "{user_idea}".
 
@@ -68,22 +68,27 @@ Cover areas relevant to this product:
 
 ---
 
-## Section 12: QA & Testing Strategy
+## 13. 3-Month MVP Roadmap
 
-Outline the testing approach for the core user flows of "{user_idea}":
+Define a phased roadmap for a small engineering team (2-4 developers) to build the Must-Have user stories and functional requirements.
 
-**The 3 Most Critical End-to-End Flows to Test:**
-For each flow, describe what success looks like and what a failure looks like. Make these specific to the actual user flows of this product.
+| Phase | Weeks | Goal | Key Deliverables |
+|-------|-------|------|------------------|
 
-1. [Flow name] — [What must work perfectly / What failure means for the user]
-2. [Flow name] — [What must work perfectly / What failure means for the user]
-3. [Flow name] — [What must work perfectly / What failure means for the user]
+Provide a detailed week-by-week breakdown for Month 1:
 
-**Dangerous Edge Cases & Failure Scenarios:**
-List the edge cases and failure modes that are most harmful specifically for "{user_idea}". Think about: what happens when the core value exchange breaks down, data integrity issues, concurrent user conflicts, payment failures, and any safety scenarios relevant to this product type.
+| Week | Focus | Specific Deliverables | Done When |
+|------|-------|-----------------------|-----------|
 
-**User Acceptance Testing Approach:**
-How should UAT be conducted for this specific product? Who should the beta testers be, what scenarios must they complete, and what constitutes a passing result?"""
+---
+
+## 14. 6-Month Stretch Goals
+
+List three specific expansion ideas for "{user_idea}" after the MVP is proven. Each must be a natural next step for THIS product type.
+
+1. **[Expansion name]:** [What it is and why it fits this product after MVP]
+2. **[Expansion name]:** [Same format]
+3. **[Expansion name]:** [Same format]"""
 
         for chunk in groq_client.generate_stream(
             prompt=prompt,

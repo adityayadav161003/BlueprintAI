@@ -136,303 +136,405 @@ class OllamaClient:
             time.sleep(0.015)
 
     def _get_mock_ba(self, idea: str, industry: str) -> str:
-        data = {
-            "problem_statement": {
-                "pain_point": f"Users face severe inefficiencies when trying to solve tasks related to {idea}. The current landscape lacks real-time automation and relies on fragmented, manual tooling.",
-                "target_audience": f"Professionals, developers, and enterprises operating in the {industry} sector who require seamless coordination and data processing.",
-                "current_workarounds": "Manual tracking using Excel spreadsheets, disjointed chat apps, and legacy systems that require constant context-switching."
-            },
-            "market_size": {
-                "tam": "$15 Billion. Calculated as the global addressable spend of enterprises adopting digital transformation tools.",
-                "sam": "$4.5 Billion. Representing the target segment of mid-market to enterprise companies in the region.",
-                "som": "$250 Million. The realistic target share within the first 3 years of launching our optimized solution."
-            },
-            "success_metrics": [
-                {
-                    "metric": "User Retention Rate (D30)",
-                    "target": "> 45%",
-                    "justification": "Ensures the solution creates high daily utility and sticky habits for professionals."
-                },
-                {
-                    "metric": "Task Completion Velocity",
-                    "target": "3x reduction in time",
-                    "justification": "Demonstrates clear efficiency gains over legacy manual workarounds."
-                },
-                {
-                    "metric": "Net Promoter Score (NPS)",
-                    "target": "> 60",
-                    "justification": "Indicates high user satisfaction and organic viral loops."
-                }
-            ],
-            "competitors": [
-                {
-                    "name": "LegacyCorp Solutions",
-                    "strengths": ["Deep market penetration", "Robust offline infrastructure"],
-                    "weaknesses": ["Extremely high licensing costs", "Outdated mobile UI/UX", "No AI integrations"]
-                },
-                {
-                    "name": "ModernSync Inc",
-                    "strengths": ["Clean modern design", "Fast sync speeds"],
-                    "weaknesses": ["Lacks custom integrations", "Poor scalability for enterprise clients"]
-                }
-            ],
-            "revenue_model": {
-                "model_type": "B2B SaaS / Tiered Subscription",
-                "pricing_strategy": "Starter: $15/user/month (basic features), Growth: $49/user/month (advanced automations, history), Enterprise: Custom (SLA, dedicated support)."
-            },
-            "key_assumptions": [
-                "Target users are willing to connect their local work data to a secure cloud platform.",
-                "FastAPI and local/hybrid AI models can process client requests in under 2 seconds.",
-                "The industry is seeing an active shift toward AI-assisted productivity platforms."
-            ]
-        }
-        return json.dumps(data, indent=2)
+        return f"""## Executive Summary
+
+A placement app for university students to grab opportunity from big companies is a web-based platform designed to connect university students with job opportunities at top companies. The app aims to solve the problem of students struggling to find and secure job placements, and companies having difficulty finding the best candidates.
+
+---
+
+## 1. Problem Statement & Market Opportunity
+
+The specific problem that this product solves is the difficulty university students face in finding and securing job placements with big companies. Currently, students rely on university career fairs, online job boards like LinkedIn and Indeed, and personal networking to find opportunities. However, these methods often result in a high volume of unqualified applicants.
+
+The market size for this problem is significant, with over 20 million university students in the US alone. The market opportunity is estimated to be around $1.5 billion, considering the average cost of recruiting a single candidate is around $4,000.
+
+---
+
+## 2. Target Audience
+
+The primary population of people who would use "A placement app for university students to grab opportunity from big companies" are university students aged 18-25, primarily based in urban areas, with a focus on those pursuing degrees in in-demand fields such as computer science, engineering, and business.
+
+---
+
+## 3. User Personas
+
+### Emily Chen, 21 — Junior majoring in Computer Science, San Francisco
+- **Income:** $1,500
+- **Daily Workflow:** Emily spends several hours a week browsing job boards, attending career fairs, and networking with alumni to find internship opportunities.
+- **Pain Points:** She is frustrated with the lack of personalized job recommendations on platforms like LinkedIn and the difficulty in standing out in a crowded applicant pool.
+- **Goals:** Emily wants to secure a summer internship at a top tech firm and eventually land a full-time job offer after graduation.
+- **Tech Comfort:** High, prefers using her smartphone for most tasks.
+- **Quote:** "I feel like I'm just throwing my resume into a black hole when I apply for jobs online. I wish there was a way to get my foot in the door and actually talk to people at the companies I'm interested in."
+- **Usage Pattern:** Emily would use the app daily to browse job openings, practice interview skills, and connect with company representatives.
+
+### Rohan Patel, 22 — Senior majoring in Business Administration, New York
+- **Income:** $2,000
+- **Daily Workflow:** Rohan networks extensively with professionals in his industry, attends career fairs, and applies to job openings on company websites.
+- **Pain Points:** He is frustrated with the lack of transparency in the recruitment process and the difficulty in getting feedback on his applications.
+- **Goals:** Rohan wants to land a full-time job at a top investment bank or consulting firm after graduation.
+- **Tech Comfort:** Medium.
+- **Quote:** "I want to apply to companies where I know my profile matches what they want. Traditional portals don't show the match percentage."
+- **Usage Pattern:** Browses weekly, submits 2-3 applications a day.
+
+---
+
+## 4. Competitive Analysis
+
+| Competitor | Strengths | Weaknesses | Our Advantage |
+|-----------|-----------|------------|---------------|
+| LinkedIn | Large user base, established brand | Limited personalization, high competition | Personalized job recommendations, simplified application process |
+| Indeed | Comprehensive job listings, user-friendly interface | Limited company information, high volume of unqualified applicants | Company profiles, tailored job matching |
+| Glassdoor | Valuable company insights, user reviews | Limited job listings, focus on company culture rather than job matching | Job listings, company information, and user reviews in one platform |
+
+---
+
+## 5. Unique Value Proposition
+
+A placement app for university students to grab opportunity from big companies offers a unique value proposition by providing personalized job recommendations, company profiles, and a simplified application process. This app fills the gap in the current recruitment process by providing a dedicated platform for students to showcase their skills and companies to find top talent."""
+
 
     def _get_mock_pm(self, idea: str, industry: str) -> str:
-        return f"""# Product Requirements Document (PRD) Draft: {idea}
+        return f"""## 6. System Architecture
 
-## 1. User Personas
+The application will use a modern three-tier architecture: a responsive, single-page web client frontend; a lightweight HTTP API gateway backend serving Server-Sent Events (SSE); and a local file-based database schema for session persistence.
 
-### Persona 1: Alex the High-Performer
-- **Demographics**: 32 years old, Lead Project Coordinator at a mid-sized firm.
-- **Goals**: Automate status reports, eliminate manual tracking, save 5+ hours weekly.
-- **Frustrations**: Tired of writing updates, copy-pasting spreadsheet data.
-- **Tech Comfort**: High. Uses multiple SaaS tools daily.
-
-### Persona 2: Sam the Operational Manager
-- **Demographics**: 45 years old, Operations Lead.
-- **Goals**: Streamline team workflows, view real-time pipeline performance metrics.
-- **Frustrations**: Fragmented communication, out-of-date status reporting.
-- **Tech Comfort**: Medium. Prefers simple, consolidated dashboards.
-
-### Persona 3: Jordan the Independent Contractor
-- **Demographics**: 28 years old, Freelance Developer.
-- **Goals**: Manage multiple clients, create automated specs without overhead.
-- **Frustrations**: Unclear scopes from clients, excessive time spent on administrative overhead.
-- **Tech Comfort**: Very High. Active terminal and API user.
-
-## 2. User Stories
-*MoSCoW Prioritized*
-
-### Must Have:
-1. **US-101**: As a team coordinator, I want to type a raw idea and generate a structured outline, so that I don't start with a blank page.
-2. **US-102**: As an operations manager, I want real-time streaming updates, so that I can see the system working immediately.
-3. **US-103**: As a contractor, I want to download my generated document, so that I can share it with external partners.
-4. **US-104**: As a user, I want a secure history tab, so that I can retrieve past generations without starting over.
-
-### Should Have:
-5. **US-105**: As a coordinator, I want to see a visual diagram of the AI process, so that I understand which agent is active.
-6. **US-106**: As an editor, I want my output rendered in beautiful markdown, so that I can easily scan headers and bullet points.
-7. **US-107**: As a manager, I want to export my PRD to PDF directly, so that I can print or present it at board meetings.
-
-### Could Have:
-8. **US-108**: As a developer, I want a voice input option, so that I can dictate product ideas on my mobile device.
-9. **US-109**: As an international user, I want multi-language generation, so that I can support localized teams.
-
-### Won't Have (For MVP):
-10. **US-110**: Real-time collaborative editing in a shared canvas by multiple active web clients.
-
-## 3. Functional Requirements
-
-| ID | Description | Acceptance Criteria |
-|---|---|---|
-| **FR-001** | Prompt Input Handling | Accept text inputs up to 1000 characters. Validate inputs against injection. |
-| **FR-002** | Multi-Agent Generation | Process prompt through 4-stage pipeline sequentially (BA -> PM -> QA -> Synthesis). |
-| **FR-003** | SSE Streaming | Stream outputs token-by-token. Support visual step status transitions. |
-| **FR-004** | Document Caching | Save generated drafts and finals in ChromaDB indexed by project ID. |
-| **FR-005** | Markdown Rendering | Correctly parse Markdown, rendering headers, tables, lists, and bold text. |
-| **FR-006** | Export Actions | Download as `.md` file. Format print layouts for clean browser PDF export. |
-| **FR-007** | Pipeline Interruption | Support cancellation of active generations via backend API connections. |
-| **FR-008** | Local Vector Storage | Store and query metadata tags. Retrieve history by prompt content. |
-
-## 4. Non-Functional Requirements
-- **Performance**: SSE stream connection must establish in < 500ms. Response tokens must stream at > 15 tokens/sec.
-- **Security**: Prompt input sanitization. Secure database connection. SQLite vector storage encrypted on rest.
-- **Scalability**: Backend must run in multi-threaded loop to handle concurrent sessions.
-- **Accessibility**: WCAG 2.1 AA compliant. High contrast mode. Screen-reader friendly DOM structure.
-
-## 5. UI/UX Notes
-- **Key Screens**: 
-  1. Main Dashboard: Input panel + visual flow pipeline map.
-  2. Tabbed Results Pane: Switching between Active streaming panels (Analysis, Draft, QA, Final PRD).
-  3. History Drawer: Left-aligned collapsible sidebar showing stored sessions.
-- **Design Principles**: Dark tech-minimalist theme. Neon active-glow accents. Clear glassmorphism panels. Responsive grid scaling down to mobile viewports.
-"""
-
-    def _get_mock_qa(self, idea: str, industry: str) -> str:
-        return f"""# QA Critic Report: Critical Evaluation for {idea}
-
-## 1. Logical Gaps
-- **Gap 1: Missing Core API Definitions**: The PRD draft mentions "database integration" and "sync actions" but does not define the format of the payloads or what database engines are officially supported.
-- **Gap 2: History Conflict Behavior**: When a user retrieves a past document from ChromaDB and runs a new generation, there is no explanation of whether the previous entry is overwritten or versioned.
-- **Gap 3: Token Limit Overflow**: For very complex prompts, the PM prompt does not detail how the agent prevents exceeding Ollama context limits.
-
-## 2. Technical Risks
-- **Risk 1: Vector Store Scaling (ChromaDB)**: In-memory ChromaDB databases will leak memory and lose history on restart. Persistent storage paths must be explicitly configured to prevent total data loss.
-- **Risk 2: SSE Network Timeouts**: Web browsers will automatically drop and retry EventSource connections that stay idle for too long without keep-alive pings.
-
-## 3. Missing Requirements
-- **Missing Requirement 1**: Active cancellation mechanism. A user clicking "Stop" must notify the backend to cancel the active LLM process, otherwise resources are wasted.
-- **Missing Requirement 2**: Session recovery on network failure. If connection drops, the frontend should be able to reconnect to the active backend session using the unique session ID.
-
-## 4. Section Ratings
-
-| Section | Rating (1-10) | Justification |
-|---|---|---|
-| User Personas | 8/10 | Well-developed and covers all main profiles, but could include more metrics on tech comfort. |
-| User Stories | 9/10 | Excellent MoSCoW prioritization, highly detailed. |
-| Functional Specs | 6/10 | Contains core criteria, but lacks clear error-handling scenarios. |
-| Non-Functional Specs | 7/10 | Good SLA metrics, but security parameters are too generic. |
-| UI/UX Notes | 8/10 | Clean structure, matches modern theme guidelines. |
-
-## 5. Priority Fixes
-1. Configure ChromaDB to use **persistent directory storage** instead of volatile in-memory storage.
-2. Implement an **SSE Keep-Alive Heartbeat** (pings every 15 seconds) to prevent browser-side client timeouts.
-3. Explicitly document **version controls** for past generations when re-triggering prompt runs.
-"""
-
-    def _get_mock_syn(self, idea: str, industry: str) -> str:
-        return f"""# Final Product Requirements Document: {idea}
-
-## Executive Summary
-- **Vision**: Establish the premier platform for {idea} within the {industry} space, setting the standard for quality, trust, and accessibility.
-- **Target Audience**: Diverse user base spanning multiple demographics, income levels, and geographic markets.
-- **Strategic Impact**: Eliminate friction and fragmentation in the current market, serving users from tech-savvy professionals to first-time digital buyers.
+```mermaid
+flowchart LR
+    Student(["👤 Student"]) --> WebUI["Frontend Portal"]
+    Recruiter(["🏢 Recruiter"]) --> WebUI
+    WebUI --> API["API Gateway"]
+    API --> Auth["Auth Service"]
+    API --> JobService["Job Match Engine"]
+    JobService --> DB[("Database")]
+```
 
 ---
 
-## 1. User Personas — Diverse, Research-Backed Profiles
+## 7. Prioritized User Stories
 
-### Persona 1: Rahul Sharma — Primary End User (Urban Millennial)
-- **Demographics**: 27 years old, Software Engineer, Bengaluru. Mid-income (~₹10L/yr). High tech literacy.
-- **Daily Workflow**: Browses Facebook Marketplace and OLX for deals; frustrated by lack of quality filters and scammy listings.
-- **Primary Pain Points**: Cannot verify laptop condition remotely; gets lowballed when selling; no price benchmarking tool.
-- **Goals**: Buy a certified refurbished laptop under ₹30K with 6-month warranty. Sell his old one at fair market value within 2 weeks.
-- **Technology Comfort**: High — uses mobile-first, prefers app over web, uses UPI and Razorpay.
-- **Budget Authority**: Buys independently. Budget-flexible if quality is guaranteed.
-- **Representative Quote**: *"I just want to know the laptop is actually working before I show up with cash."*
-- **Product Usage Pattern**: Browses 3x/week, compares 5+ listings before buying.
+### Must-Have (Core Loop)
+*Without these, the product does not work.*
 
-### Persona 2: Sunita Devi — Older / Lower-Tech User (Tier-2 City Parent)
-- **Demographics**: 54 years old, homemaker, Lucknow. Lower-middle income. Low tech literacy.
-- **Daily Workflow**: Relies on her son to help purchase things online. Needs a laptop for her daughter's college coursework.
-- **Primary Pain Points**: Overwhelmed by too many options. Fears online fraud. Cannot judge specs.
-- **Goals**: Buy a reliable, affordable laptop for college use — under ₹20K, simple UI.
-- **Technology Comfort**: Low — uses WhatsApp on Android, struggles with complex web flows.
-- **Budget Authority**: Household decision requires spouse approval. Extremely price-sensitive.
-- **Representative Quote**: *"Bhai, ek baar bata do konsa sahi rahega — aur fraud nahi hoga na?"*
-- **Product Usage Pattern**: One-time purchase, guided by recommendations. Needs WhatsApp/phone support.
-
-### Persona 3: Priya Kapoor — Budget-Constrained Student
-- **Demographics**: 20 years old, undergraduate student, Pune. Income: ₹0 (dependent). Very high tech literacy.
-- **Daily Workflow**: Browses Reddit, YouTube, Quora for laptop recommendations. Tracks prices obsessively.
-- **Primary Pain Points**: Budget strictly ₹15K. Worried about hidden defects. No return policy on most used platforms.
-- **Goals**: Find a laptop with decent specs for coding and design coursework, with at least 3-month warranty.
-- **Technology Comfort**: Very High — uses Discord, GitHub, Reddit daily. Web + mobile.
-- **Budget Authority**: Dependent on parents; every rupee counts. Needs EMI option.
-- **Representative Quote**: *"I've been tracking OLX for 3 weeks — every good deal disappears in an hour."*
-- **Product Usage Pattern**: Daily browsing, price alerts enabled, impulse purchases on flash deals.
-
-### Persona 4: Vikram Joshi — Power User / Reseller (High-Frequency)
-- **Demographics**: 35 years old, laptop reseller business owner, Delhi. High income. Very high tech literacy.
-- **Daily Workflow**: Sources 15-20 laptops/month, refurbishes them, resells. Currently uses WhatsApp groups and Excel for inventory.
-- **Primary Pain Points**: No bulk listing tool. Difficult to price competitively. Chargebacks and scam buyers waste time.
-- **Goals**: List 20+ devices at once, track sales pipeline, get verified seller badge to command premium pricing.
-- **Technology Comfort**: Very High — uses Shopify, Excel, WhatsApp Business.
-- **Budget Authority**: Full authority. Highest LTV customer — B2B tier.
-- **Representative Quote**: *"I need a platform that treats sellers like a business, not a random OLX poster."*
-- **Product Usage Pattern**: Daily logins, bulk operations, analytics dashboard user.
-
-### Persona 5: Deepa Nair — Platform Admin / Operations Manager
-- **Demographics**: 31 years old, Operations Manager (internal role at the company), Mumbai. High income.
-- **Daily Workflow**: Reviews seller listings for quality compliance, handles dispute resolution, monitors KPIs.
-- **Primary Pain Points**: No centralized admin tool — currently uses spreadsheets. Manual fraud review.
-- **Goals**: Review 50+ new listings per day, flag suspicious sellers, generate weekly reports, manage refund queue.
-- **Technology Comfort**: High — advanced Excel, Notion, internal dashboards.
-- **Budget Authority**: N/A (internal user — not a paying customer).
-- **Representative Quote**: *"I'm spending 3 hours every morning just triaging listings that should be auto-filtered."*
-- **Product Usage Pattern**: Full-day admin dashboard user. Heavy use of bulk actions and reporting.
-
----
-
-## 2. Competitive Positioning
-Our solution dominates the competitors identified by our market research:
-- **Vs. LegacyCorp Solutions**: Our tool offers a sleek, glassmorphic UI, modern mobile support, and built-in local AI workflows. It avoids LegacyCorp's steep enterprise pricing by leveraging local Ollama installations.
-- **Vs. ModernSync Inc**: Unlike ModernSync, which has a rigid data structure, our platform supports custom AI integrations, persistence via ChromaDB, and exports documents to Markdown/PDF out-of-the-box.
-
----
-
-## 3. Prioritized User Stories
-
-### Must-Have
-- **US-101**: As a coordinator, I want to type a raw idea and generate a structured outline, so that I don't start with a blank page.
-- **US-102**: As an operations manager, I want real-time streaming updates, so that I can see the system working immediately.
-- **US-103**: As a contractor, I want to download my generated document, so that I can share it with external partners.
-- **US-104**: As a user, I want a secure history tab, so that I can retrieve past generations without starting over.
+1. **As a university student**, I want to create a profile showcasing my skills, education, and experience, so that I can increase my visibility to potential employers.
+   > **AC:** Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers.
+2. **As a university student**, I want to browse and search for job listings from big companies, so that I can find opportunities that match my skills and interests.
+   > **AC:** Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details.
+3. **As a university student**, I want to apply for job listings directly through the app, so that I can easily submit my application and resume.
+   > **AC:** Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer.
+4. **As a university student**, I want to receive notifications about new job listings that match my profile and preferences, so that I can stay up-to-date on new opportunities.
+   > **AC:** Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details.
+5. **As a university student**, I want to track the status of my job applications, so that I can stay organized and follow up with employers.
+   > **AC:** Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled").
 
 ### Should-Have
-- **US-105**: As a coordinator, I want to see a visual diagram of the AI process, so that I understand which agent is active.
-- **US-106**: As an editor, I want my output rendered in beautiful markdown, so that I can easily scan headers and bullet points.
-- **US-107**: As a manager, I want to export my PRD to PDF directly, so that I can print or present it at board meetings.
+*Significantly improves the experience.*
 
-### Could-Have & Stretch
-- **US-108**: Voice Input integration using Web Speech API for dictation.
-- **US-109**: Support for multi-language PRD translation (Hindi, Spanish, French).
+6. **As a university student**, I want to receive personalized job recommendations based on my profile and search history, so that I can discover new opportunities that are tailored to my interests.
+   > **AC:** Given I am a registered user, When I log in, Then I see a list of recommended job listings that match my profile and search history.
+7. **As a university student**, I want to be able to filter job listings by location, industry, and job type, so that I can narrow down my search results to relevant opportunities.
+   > **AC:** Given I am a registered user, When I use the filter function, Then I see a list of job listings that match my selected criteria.
+8. **As a university student**, I want to be able to save job listings for later, so that I can come back to them and apply when I'm ready.
+   > **AC:** Given I am a registered user, When I click the "Save" button on a job listing, Then the job listing is added to my saved jobs list.
 
----
+### Could-Have
+*Defer if needed.*
 
-## 4. Functional Requirements & QA Enhancements
-
-| ID | Description | Acceptance Criteria |
-|---|---|---|
-| **FR-001** | Prompt Input Handling | Accept text inputs up to 1000 characters. Validate inputs against injection. |
-| **FR-002** | Multi-Agent Generation | Process prompt through 4-stage pipeline sequentially (BA -> PM -> QA -> Synthesis). |
-| **FR-003** | SSE Streaming | Stream outputs token-by-token. Support visual step status transitions. |
-| **FR-004** | Document Versioning | Store all generations in ChromaDB. If prompt is re-run, append timestamp version tag (`v1.0`, `v1.1`) rather than overwriting. |
-| **FR-005** | Markdown Rendering | Correctly parse Markdown, rendering headers, tables, lists, and bold text. |
-| **FR-006** | Export Actions | Download as `.md` file. Format print layouts for clean browser PDF export. |
-| **FR-007** | Pipeline Interruption | Allow user to cancel active streams, firing a cancellation hook to backend to release LLM threads. |
-| **FR-008** | Persistent Storage | ChromaDB must write directly to local file directory (`backend/memory/chroma_db`) to guarantee data integrity across restarts. |
+9. **As a university student**, I want to be able to connect with other students and professionals in my industry, so that I can build my network and learn about new opportunities.
+   > **AC:** Given I am a registered user, When I join a group or community, Then I can see posts and discussions from other members and engage with them.
+10. **As a university student**, I want to be able to access resources and tips for improving my resume and interview skills, so that I can increase my chances of getting hired.
+    > **AC:** Given I am a registered user, When I access the resources section, Then I see a list of articles, videos, and tips on resume building and interview prep.
 
 ---
 
-## 5. Risk Mitigation Plan
+## 8. Functional Requirements
 
-- **Risk 1: In-Memory Data Loss**: 
-  - *Mitigation*: Configured ChromaDB to use the persistent client storing vectors on the disk under `backend/memory/chroma_db`.
-- **Risk 2: SSE Network Timeout**:
-  - *Mitigation*: Backend sends empty comments (`: keep-alive\\n\\n`) every 15 seconds to keep the connection alive in standard browsers.
-- **Risk 3: Complex Prompt Processing**:
-  - *Mitigation*: Agent prompts enforce role play and clear structural delimiters to prevent context leakage or formatting breakdown.
+| ID | Feature Area | Description | Acceptance Criteria | Priority |
+|----|-------------|-------------|---------------------|----------|
+| 1 | User Profile | Create and manage user profiles | Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers | P0 |
+| 2 | Job Search | Search and filter job listings | Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details | P0 |
+| 3 | Job Application | Apply for job listings directly through the app | Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer | P0 |
+| 4 | Notifications | Receive notifications about new job listings | Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details | P0 |
+| 5 | Application Tracking | Track the status of job applications | Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled") | P0 |
+
+**Priority:** P0 = must have at launch, P1 = first 30 days post-launch, P2 = future
 
 ---
 
-## 6. 3-Month MVP Roadmap
+## 9. Non-Functional Requirements
 
+| Category | Requirement | Target | Notes |
+|----------|-------------|--------|-------|
+| Performance | Page load time | 2 seconds | Measure using Google PageSpeed Insights |
+| Scalability | Handle concurrent users | 10,000 concurrent users | Use load testing tools to ensure scalability |
+| Security | Protect user data | 128-bit SSL encryption | Use HTTPS protocol to ensure secure data transmission |
+| Compliance | Data privacy laws | Comply with GDPR and CCPA regulations | Ensure user data is handled in accordance with regulations |
+| Availability | Uptime SLA | Ensure 99.9% uptime | Use monitoring tools to detect and respond to downtime |
+| Accessibility | WCAG compliance | Follow WCAG 2.1 guidelines | Use accessibility testing tools to identify and fix issues |
+
+---
+
+## 10. Success Metrics & KPIs
+
+| Metric | What It Measures | Month 1 Target | Month 6 Target | Month 12 Target |
+|--------|-----------------|----------------|----------------|-----------------|
+| User Acquisition | Number of registered users | 1,000 | 10,000 | 50,000 |
+| Job Listings | Number of job listings | 100 | 1,000 | 5,000 |
+| Application Rate | Number of job applications | 50 | 500 | 2,000 |
+| Placement Rate | Number of successful placements | 10 | 100 | 500 |
+
+**North Star Metric:** Placement Rate (number of successful placements)"""
+
+    def _get_mock_qa(self, idea: str, industry: str) -> str:
+        return f"""## 11. Risk Register
+
+| Risk | Category | Likelihood | Impact | Mitigation |
+|------|----------|------------|--------|------------|
+| Technical Debt | Technical | High | Medium | Regularly review and refactor code to ensure maintainability |
+| Cybersecurity Threats | Security | Medium | High | Implement robust security measures, such as encryption and firewalls |
+| Competition | Market | Medium | High | Continuously monitor competitors and adjust strategy accordingly |
+| User Adoption | User | Medium | Medium | Implement user-friendly onboarding process and provide regular updates and support |
+
+---
+
+## 12. Open Questions & Assumptions
+
+* **How will we ensure the quality and accuracy of job listings?:** This is crucial to the success of the app, as users will rely on the accuracy of job listings to make informed decisions. → *Mitigation:* Implement a robust moderation process to review and approve job listings before they are posted.
+* **How will we handle user data and ensure compliance with regulations?:** This is essential to maintaining user trust and avoiding potential legal issues. → *Mitigation:* Implement robust security measures, such as encryption and access controls, and regularly review and update policies to ensure compliance with regulations.
+* **How will we measure the success of the app and make data-driven decisions?:** This is crucial to continuously improving the app and ensuring it meets user needs. → *Mitigation:* Implement analytics tools to track key metrics, such as user acquisition, job listings, and application rate, and regularly review and analyze data to inform decision-making.
+
+---
+
+## 13. 3-Month MVP Roadmap
+
+| Phase | Weeks | Goal | Key Deliverables |
+|-------|-------|------|------------------|
+| Phase 1 | 1-4 | Develop user profile and job search features | User profile creation, job search functionality, and basic filtering |
+| Phase 2 | 5-8 | Develop job application and notification features | Job application functionality, notification system, and basic analytics |
+| Phase 3 | 9-12 | Develop application tracking and user feedback features | Application tracking functionality, user feedback system, and refined analytics |
+
+### Week-by-week breakdown for Month 1:
+
+| Week | Focus | Specific Deliverables | Done When |
+|------|-------|-----------------------|-----------|
+| Week 1 | User Profile | Develop user profile creation feature | User profile creation is functional and tested |
+| Week 2 | Job Search | Develop job search functionality | Job search is functional and tested |
+| Week 3 | Filtering | Develop basic filtering for job search | Filtering is functional and tested |
+| Week 4 | Testing and Review | Test and review all features developed in Month 1 | All features are functional and tested |
+
+---
+
+## 14. 6-Month Stretch Goals
+
+1. **Integrate with LinkedIn and Indeed:** Integrate the app with LinkedIn and Indeed to fetch job listings and company information, expanding the app's reach and providing more opportunities for users.
+2. **Develop a mobile app:** Develop a mobile app to provide users with a seamless and convenient way to access the app on-the-go, increasing user engagement and retention.
+3. **Implement AI-powered job matching:** Implement AI-powered job matching to provide users with personalized job recommendations, increasing the chances of successful placements and improving user satisfaction.
+
+These stretch goals will help the app to continue to grow and improve, providing more value to users and increasing its competitiveness in the market."""
+
+    def _get_mock_syn(self, idea: str, industry: str) -> str:
+        return f"""# {idea}
+## Product Requirements Document
+
+**Version:** 1.0 | **Status:** Final | **Industry:** {industry}
+
+---
+
+## Executive Summary
+
+A placement app for university students to grab opportunity from big companies is a web-based platform designed to connect university students with job opportunities at top companies. The app aims to solve the problem of students struggling to find and secure job placements, and companies having difficulty finding the best candidates. With a growing market size of over 20 million university students in the US alone, and a market opportunity estimated to be around $1.5 billion, this app is poised to revolutionize the recruitment process. By providing a dedicated platform for students to showcase their skills and companies to find top talent, this app is well-positioned to capitalize on the shift towards online recruitment and virtual recruitment.
+
+---
+
+## 1. Problem Statement & Market Opportunity
+
+The specific problem that this product solves is the difficulty university students face in finding and securing job placements with big companies. Currently, students rely on university career fairs, online job boards like LinkedIn and Indeed, and personal networking to find opportunities. However, these methods often result in a high volume of unqualified applicants, making it difficult for students to stand out and for companies to find the best candidates. For example, a computer science student at a top-tier university may have to compete with thousands of other students for a limited number of internship positions at a top tech firm.
+
+The market size for this problem is significant, with over 20 million university students in the US alone, and a growing number of big companies looking to hire fresh talent. The market opportunity is estimated to be around $1.5 billion, considering the average cost of recruiting a single candidate is around $4,000. Recently, the shift towards online recruitment and the increasing importance of digital presence have made it viable for a dedicated product to address this problem. With the rise of remote work and virtual recruitment, companies are now more open to considering candidates from a wider geographic range, making a placement app an attractive solution.
+
+---
+
+## 2. Target Audience
+
+The primary population of people who would use "A placement app for university students to grab opportunity from big companies" are university students aged 18-25, primarily based in urban areas, with a focus on those pursuing degrees in in-demand fields such as computer science, engineering, and business. These students are likely to be digitally savvy, active on social media, and eager to launch their careers with top companies. They are currently using a combination of online job boards, university career services, and personal networking to find job opportunities, but are frustrated with the lack of transparency, personalization, and efficiency in the current recruitment process.
+
+---
+
+## 3. User Personas
+
+### Emily Chen, 21 — Junior majoring in Computer Science, San Francisco
+- **Income:** $1,500
+- **Daily Workflow:** Emily spends several hours a week browsing job boards, attending career fairs, and networking with alumni to find internship opportunities.
+- **Pain Points:** She is frustrated with the lack of personalized job recommendations on platforms like LinkedIn and the difficulty in standing out in a crowded applicant pool.
+- **Goals:** Emily wants to secure a summer internship at a top tech firm and eventually land a full-time job offer after graduation.
+- **Tech Comfort:** High, prefers using her smartphone for most tasks.
+- **Quote:** "I feel like I'm just throwing my resume into a black hole when I apply for jobs online. I wish there was a way to get my foot in the door and actually talk to people at the companies I'm interested in."
+- **Usage Pattern:** Emily would use the app daily to browse job openings, practice interview skills, and connect with company representatives.
+
+### Rohan Patel, 22 — Senior majoring in Business Administration, New York
+- **Income:** $2,000
+- **Daily Workflow:** Rohan networks extensively with professionals in his industry, attends career fairs, and applies to job openings on company websites.
+- **Pain Points:** He is frustrated with the lack of transparency in the recruitment process and the difficulty in getting feedback on his applications.
+- **Goals:** Rohan wants to land a full-time job at a top investment bank or consulting firm after graduation.
+- **Tech Comfort:** Medium.
+- **Quote:** "I want to apply to companies where I know my profile matches what they want. Traditional portals don't show the match percentage."
+- **Usage Pattern:** Browses weekly, submits 2-3 applications a day.
+
+---
+
+## 4. Competitive Analysis
+
+| Competitor | Strengths | Weaknesses | Our Advantage |
+|-----------|-----------|------------|---------------|
+| LinkedIn | Large user base, established brand | Limited personalization, high competition | Personalized job recommendations, simplified application process |
+| Indeed | Comprehensive job listings, user-friendly interface | Limited company information, high volume of unqualified applicants | Company profiles, tailored job matching |
+| Glassdoor | Valuable company insights, user reviews | Limited job listings, focus on company culture rather than job matching | Job listings, company information, and user reviews in one platform |
+
+---
+
+## 5. Unique Value Proposition
+
+A placement app for university students to grab opportunity from big companies offers a unique value proposition by providing personalized job recommendations, company profiles, and a simplified application process. This app fills the gap in the current recruitment process by providing a dedicated platform for students to showcase their skills and companies to find top talent. By leveraging machine learning algorithms and natural language processing, the app can match students with job openings that fit their skills and interests, increasing the chances of successful placements.
+
+---
+
+## 6. System Architecture
+
+A placement app for university students to grab opportunity from big companies will have a web-based client, a backend API, and a database to store user information, company profiles, and job listings. The app will utilize a microservices architecture, with separate services for user authentication, job matching, and company profiles. The app will also integrate with external services such as LinkedIn and Indeed to fetch job listings and company information.
+
+```mermaid
+flowchart LR
+    Student(["👤 Student"]) --> WebUI["Frontend Portal"]
+    Recruiter(["🏢 Recruiter"]) --> WebUI
+    WebUI --> API["API Gateway"]
+    API --> Auth["Auth Service"]
+    API --> JobService["Job Match Engine"]
+    JobService --> DB[("Database")]
 ```
-Phase 1: Foundation (Weeks 1-4)
-├── W1: Setup FastAPI app and Ollama Client wrapper (with local mock fallbacks)
-├── W2: Define prompt templates & agent modules (BA, PM, QA)
-├── W3: Integrate local ChromaDB storage and persistence
-└── W4: Deploy SSE endpoint and test streaming payloads
-
-Phase 2: Core Features (Weeks 5-8)
-├── W5: Build Lumina Nexus glassmorphic frontend structure
-├── W6: Implement agent visualizer animations and status logs
-├── W7: Integrate marked.js markdown parsing & tab switcher
-└── W8: Create export controllers for Markdown/PDF
-
-Phase 3: Integration & Testing (Weeks 9-12)
-├── W9: Write automated testing scripts (verify_setup.py)
-├── W10: Perform stress-tests on concurrent sessions
-├── W11: Optimize rendering speeds and styling layout fixes
-└── W12: Final release and documentation wrap-up
-```
 
 ---
 
-## 7. Stretch Goals (6-Month Plan)
-1. **Side-by-Side Compare Mode**: Compare differences between two different ideas in a dual-column layout.
-2. **Template Library**: Pre-built starting configurations for healthcare, SaaS, fintech, and game development.
-3. **Voice Command Dictation**: Speak prompt inputs using browser audio streaming.
-"""
+## 7. Prioritized User Stories
+
+### Must-Have (Core Loop)
+*Without these, the product does not work.*
+
+1. **As a university student**, I want to create a profile showcasing my skills, education, and experience, so that I can increase my visibility to potential employers.
+   > **AC:** Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers.
+2. **As a university student**, I want to browse and search for job listings from big companies, so that I can find opportunities that match my skills and interests.
+   > **AC:** Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details.
+3. **As a university student**, I want to apply for job listings directly through the app, so that I can easily submit my application and resume.
+   > **AC:** Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer.
+4. **As a university student**, I want to receive notifications about new job listings that match my profile and preferences, so that I can stay up-to-date on new opportunities.
+   > **AC:** Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details.
+5. **As a university student**, I want to track the status of my job applications, so that I can stay organized and follow up with employers.
+   > **AC:** Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled").
+
+### Should-Have
+*Significantly improves the experience.*
+
+6. **As a university student**, I want to receive personalized job recommendations based on my profile and search history, so that I can discover new opportunities that are tailored to my interests.
+   > **AC:** Given I am a registered user, When I log in, Then I see a list of recommended job listings that match my profile and search history.
+7. **As a university student**, I want to be able to filter job listings by location, industry, and job type, so that I can narrow down my search results to relevant opportunities.
+   > **AC:** Given I am a registered user, When I use the filter function, Then I see a list of job listings that match my selected criteria.
+8. **As a university student**, I want to be able to save job listings for later, so that I can come back to them and apply when I'm ready.
+   > **AC:** Given I am a registered user, When I click the "Save" button on a job listing, Then the job listing is added to my saved jobs list.
+
+### Could-Have
+*Defer if needed.*
+
+9. **As a university student**, I want to be able to connect with other students and professionals in my industry, so that I can build my network and learn about new opportunities.
+   > **AC:** Given I am a registered user, When I join a group or community, Then I can see posts and discussions from other members and engage with them.
+10. **As a university student**, I want to be able to access resources and tips for improving my resume and interview skills, so that I can increase my chances of getting hired.
+    > **AC:** Given I am a registered user, When I access the resources section, Then I see a list of articles, videos, and tips on resume building and interview prep.
+
+---
+
+## 8. Functional Requirements
+
+| ID | Feature Area | Description | Acceptance Criteria | Priority |
+|----|-------------|-------------|---------------------|----------|
+| 1 | User Profile | Create and manage user profiles | Given I am a registered user, When I fill out the profile form, Then my profile is created and visible to me and potential employers | P0 |
+| 2 | Job Search | Search and filter job listings | Given I am a registered user, When I use the search function, Then I see a list of relevant job listings with company information and job details | P0 |
+| 3 | Job Application | Apply for job listings directly through the app | Given I am a registered user, When I click the "Apply" button on a job listing, Then my application and resume are submitted to the employer | P0 |
+| 4 | Notifications | Receive notifications about new job listings | Given I am a registered user, When a new job listing is posted that matches my profile, Then I receive a notification with the job details | P0 |
+| 5 | Application Tracking | Track the status of job applications | Given I am a registered user, When I apply for a job, Then I can view the status of my application (e.g. "Submitted", "In Review", "Interview Scheduled") | P0 |
+
+**Priority:** P0 = must have at launch, P1 = first 30 days post-launch, P2 = future
+
+---
+
+## 9. Non-Functional Requirements
+
+| Category | Requirement | Target | Notes |
+|----------|-------------|--------|-------|
+| Performance | Page load time | 2 seconds | Measure using Google PageSpeed Insights |
+| Scalability | Handle concurrent users | 10,000 concurrent users | Use load testing tools to ensure scalability |
+| Security | Protect user data | 128-bit SSL encryption | Use HTTPS protocol to ensure secure data transmission |
+| Compliance | Data privacy laws | Comply with GDPR and CCPA regulations | Ensure user data is handled in accordance with regulations |
+| Availability | Uptime SLA | Ensure 99.9% uptime | Use monitoring tools to detect and respond to downtime |
+| Accessibility | WCAG compliance | Follow WCAG 2.1 guidelines | Use accessibility testing tools to identify and fix issues |
+
+---
+
+## 10. Success Metrics & KPIs
+
+| Metric | What It Measures | Month 1 Target | Month 6 Target | Month 12 Target |
+|--------|-----------------|----------------|----------------|-----------------|
+| User Acquisition | Number of registered users | 1,000 | 10,000 | 50,000 |
+| Job Listings | Number of job listings | 100 | 1,000 | 5,000 |
+| Application Rate | Number of job applications | 50 | 500 | 2,000 |
+| Placement Rate | Number of successful placements | 10 | 100 | 500 |
+
+**North Star Metric:** Placement Rate (number of successful placements)
+
+---
+
+## 11. Risk Register
+
+| Risk | Category | Likelihood | Impact | Mitigation |
+|------|----------|------------|--------|------------|
+| Technical Debt | Technical | High | Medium | Regularly review and refactor code to ensure maintainability |
+| Cybersecurity Threats | Security | Medium | High | Implement robust security measures, such as encryption and firewalls |
+| Competition | Market | Medium | High | Continuously monitor competitors and adjust strategy accordingly |
+| User Adoption | User | Medium | Medium | Implement user-friendly onboarding process and provide regular updates and support |
+
+---
+
+## 12. Open Questions & Assumptions
+
+* **How will we ensure the quality and accuracy of job listings?:** This is crucial to the success of the app, as users will rely on the accuracy of job listings to make informed decisions. → *Mitigation:* Implement a robust moderation process to review and approve job listings before they are posted.
+* **How will we handle user data and ensure compliance with regulations?:** This is essential to maintaining user trust and avoiding potential legal issues. → *Mitigation:* Implement robust security measures, such as encryption and access controls, and regularly review and update policies to ensure compliance with regulations.
+* **How will we measure the success of the app and make data-driven decisions?:** This is crucial to continuously improving the app and ensuring it meets user needs. → *Mitigation:* Implement analytics tools to track key metrics, such as user acquisition, job listings, and application rate, and regularly review and analyze data to inform decision-making.
+
+---
+
+## 13. 3-Month MVP Roadmap
+
+| Phase | Weeks | Goal | Key Deliverables |
+|-------|-------|------|------------------|
+| Phase 1 | 1-4 | Develop user profile and job search features | User profile creation, job search functionality, and basic filtering |
+| Phase 2 | 5-8 | Develop job application and notification features | Job application functionality, notification system, and basic analytics |
+| Phase 3 | 9-12 | Develop application tracking and user feedback features | Application tracking functionality, user feedback system, and refined analytics |
+
+### Week-by-week breakdown for Month 1:
+
+| Week | Focus | Specific Deliverables | Done When |
+|------|-------|-----------------------|-----------|
+| Week 1 | User Profile | Develop user profile creation feature | User profile creation is functional and tested |
+| Week 2 | Job Search | Develop job search functionality | Job search is functional and tested |
+| Week 3 | Filtering | Develop basic filtering for job search | Filtering is functional and tested |
+| Week 4 | Testing and Review | Test and review all features developed in Month 1 | All features are functional and tested |
+
+---
+
+## 14. 6-Month Stretch Goals
+
+1. **Integrate with LinkedIn and Indeed:** Integrate the app with LinkedIn and Indeed to fetch job listings and company information, expanding the app's reach and providing more opportunities for users.
+2. **Develop a mobile app:** Develop a mobile app to provide users with a seamless and convenient way to access the app on-the-go, increasing user engagement and retention.
+3. **Implement AI-powered job matching:** Implement AI-powered job matching to provide users with personalized job recommendations, increasing the chances of successful placements and improving user satisfaction.
+
+These stretch goals will help the app to continue to grow and improve, providing more value to users and increasing its competitiveness in the market.
+
+---
+
+*PRD Version 1.0 — {idea} | {industry} | Generated by BlueprintAI*"""

@@ -36,7 +36,20 @@ Produce the following sections. Everything must describe features of "{user_idea
 
 ---
 
-## Section 6: Prioritized User Stories
+## 6. System Architecture
+
+Write one paragraph describing the technical architecture of "{user_idea}": what type of clients (web/mobile), what backend, what databases, what key external services.
+
+Then produce a Mermaid flowchart. Name every node after the actual components of "{user_idea}" — for example, a placement app might have nodes named "Placement Portal", "Job Match Service", "Resume Storage", "Company API". Do NOT use generic labels like "Core Service" or "Frontend App". Build the diagram from the product's real architecture.
+
+```mermaid
+flowchart LR
+    [build the diagram here with product-specific node names]
+```
+
+---
+
+## 7. Prioritized User Stories
 
 Write 10–15 user stories using the format:
 "As a [specific persona type from the BA analysis], I want to [perform a specific action in {user_idea}], so that [specific outcome or benefit]."
@@ -57,7 +70,7 @@ CRITICAL: Every story must describe a real action inside {user_idea}. Never reus
 
 ---
 
-## Section 7: Functional Requirements
+## 8. Functional Requirements
 
 List 10–15 functional requirements as a table:
 
@@ -77,7 +90,7 @@ CRITICAL: Every requirement must describe a feature of "{user_idea}". Do NOT des
 
 ---
 
-## Section 8: Non-Functional Requirements
+## 9. Non-Functional Requirements
 
 Cover all of the following for {user_idea} specifically:
 
@@ -95,7 +108,7 @@ Cover all of the following for {user_idea} specifically:
 
 ---
 
-## Section 9: Success Metrics & KPIs
+## 10. Success Metrics & KPIs
 
 Define measurable success for {user_idea} across all five stages. Every metric must be relevant to this specific product type.
 
