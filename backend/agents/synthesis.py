@@ -404,7 +404,13 @@ Architecture Overview
 
 Technology Components
 
-Mermaid Diagram
+Generate exactly ONE valid flowchart diagram:
+```mermaid
+flowchart LR
+User --> Frontend
+Frontend --> API
+API --> Database
+```
 
 Data Flow
 
@@ -422,7 +428,19 @@ Keys
 
 Constraints
 
-Mermaid ERD
+Generate exactly ONE valid ER Diagram:
+```mermaid
+erDiagram
+USER {{
+    string id PK
+    string email
+}}
+ORDER {{
+    string id PK
+    string user_id FK
+}}
+USER ||--o{{ ORDER : places
+```
 
 --------------------------------------------------
 
@@ -442,17 +460,45 @@ Rate Limiting
 
 # WORKFLOW DIAGRAMS
 
-User Onboarding
+Generate exactly FIVE separate, valid flowchart diagrams. For each flowchart:
+- Every node ID must be a single alphanumeric word (no spaces, e.g., use `onboarding` instead of `User Onboarding`).
+- If a node label has spaces, you MUST wrap it in double quotes (e.g., `onboarding["User Onboarding"]`).
+- Always use `-->` for arrows. Never use `->`.
 
-Core Product Flow
+A. User Onboarding
+```mermaid
+flowchart TD
+start_node["Start Onboarding"] --> input_node["Input Details"]
+input_node --> submit_node["Submit Verification"]
+```
 
-Transaction Flow
+B. Core Product Flow
+```mermaid
+flowchart TD
+action_start["Start Action"] --> processing["Process Request"]
+processing --> result_page["Display Result"]
+```
 
-Admin Flow
+C. Transaction Flow
+```mermaid
+flowchart TD
+select_pay["Select Payment"] --> initiate["Initiate Charge"]
+initiate --> confirm_pay["Confirm Payment"]
+```
 
-Support Flow
+D. Admin Flow
+```mermaid
+flowchart TD
+login_admin["Admin Login"] --> view_dashboard["View Console"]
+view_dashboard --> update_settings["Update Settings"]
+```
 
-All as Mermaid diagrams.
+E. Support Flow
+```mermaid
+flowchart TD
+submit_ticket["Submit Ticket"] --> assign_agent["Assign Agent"]
+assign_agent --> resolve_ticket["Resolve Issue"]
+```
 
 --------------------------------------------------
 
@@ -626,24 +672,26 @@ Future Opportunities
 FINAL RULES
 ==================================================
 
-1. Produce complete content.
+1. Produce complete, professional content without placeholders (no TBD, To Be Decided, X%).
 
-2. Never say:
-"refer to previous section."
+2. Never say: "refer to previous section" or "already covered". Write out all content in full detail.
 
-3. Never say:
-"already covered."
+3. DENSE DOCUMENT LAYOUT (NO EXCESSIVE WHITESPACE):
+   - Use a clean, professional, compact typography structure.
+   - Use at most ONE blank line between headers, paragraphs, and sections.
+   - Do NOT include any blank lines between list items or bullets.
+   - Align markdown tables properly and ensure they have no empty cells.
 
-4. Write all content.
+4. STRICT MERMAID DIAGRAM SYNTAX:
+   - Ensure all Mermaid code blocks are syntactically valid.
+   - Every flowchart MUST start with `flowchart LR` or `flowchart TD`.
+   - Every ER diagram MUST start with `erDiagram`.
+   - Never put titles, headers, descriptions, or comments inside the ```mermaid block.
+   - If node labels contain special characters (like parentheses, brackets, colons, or quotes), you MUST wrap the entire label in double quotes, e.g., `NodeA["Login (OAuth2)"]`.
+   - Never use HTML tags inside Mermaid code.
+   - Ensure all relationships in ER diagrams use standard Mermaid syntax (e.g., `||--o{{` or `||--||`).
 
-5. Merge intelligently.
-
-6. Remove duplicates.
-
-7. Keep strongest version.
-
-8. Final output must feel
-like a real startup PRD.
+5. Merge intelligently, remove duplication, and keep the strongest, most detailed version of each section.
 
 Generate complete document.
 """

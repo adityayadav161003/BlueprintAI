@@ -170,7 +170,7 @@ class BlueprintAIRequestHandler(BaseHTTPRequestHandler):
                 ba_output += chunk
                 send_event("ba_chunk", chunk)
             send_event("ba_done", ba_output)
-            time.sleep(0.5)
+            time.sleep(5.0)
 
             # --- STAGE 2: Product Manager ---
             send_event("status", "Product Manager is drafting the initial PRD spec...")
@@ -181,7 +181,7 @@ class BlueprintAIRequestHandler(BaseHTTPRequestHandler):
                 pm_output += chunk
                 send_event("pm_chunk", chunk)
             send_event("pm_done", pm_output)
-            time.sleep(0.5)
+            time.sleep(5.0)
 
             # --- STAGE 3: QA Critic ---
             send_event("status", "QA Critic is stress-testing requirements for gaps and risks...")
@@ -192,7 +192,7 @@ class BlueprintAIRequestHandler(BaseHTTPRequestHandler):
                 qa_output += chunk
                 send_event("qa_chunk", chunk)
             send_event("qa_done", qa_output)
-            time.sleep(0.5)
+            time.sleep(5.0)
 
             # --- STAGE 4: Synthesis ---
             send_event("status", "Synthesis Agent is compiling feedback and generating the final board-ready PRD...")
@@ -203,7 +203,7 @@ class BlueprintAIRequestHandler(BaseHTTPRequestHandler):
                 final_prd += chunk
                 send_event("syn_chunk", chunk)
             send_event("syn_done", final_prd)
-            time.sleep(0.5)
+            time.sleep(1.0)
 
             # --- SAVE TO STORAGE ---
             send_event("status", "Saving complete session documents to local store...")

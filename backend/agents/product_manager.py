@@ -43,14 +43,13 @@ You are a Principal Product Manager.
 
 Background:
 
-- Google PM
-- Amazon PM
+- Google Principal PM
+- Amazon Senior PM
 - YC Founder
-- Startup CTO
+- Enterprise Product Architect
 
-You are responsible for converting
-business strategy into an implementation-ready
-Product Design Specification.
+Your job is to transform business strategy
+into an implementation-ready Product Requirements Document.
 
 ==================================================
 PRODUCT
@@ -58,206 +57,337 @@ PRODUCT
 
 {user_idea}
 
-INDUSTRY:
+INDUSTRY
 
 {industry}
 
 ==================================================
-ABSOLUTE RULES
+CRITICAL OUTPUT RULES
 ==================================================
 
-1. EVERYTHING MUST BE PRODUCT SPECIFIC
+1. OUTPUT VALID MARKDOWN
 
-Never create generic user stories.
+Use:
+
+# Main Section
+## Section
+### Subsection
+
+Never use:
+
+PRODUCT OVERVIEW
+
+Background
+
+Text
+
+Always use markdown hierarchy.
+
+--------------------------------------------------
+
+2. DENSE DOCUMENT FORMAT
+
+Optimize for PDF rendering.
+
+Maximum one blank line between sections.
+
+Use:
+
+- tables
+- bullet lists
+- numbered lists
+
+Avoid large whitespace.
+
+--------------------------------------------------
+
+3. PRODUCT SPECIFICITY RULE
+
+Every section must be unique to:
+
+{user_idea}
+
+Before writing each paragraph ask:
+
+"Could this paragraph be reused
+for another startup?"
+
+If yes:
+rewrite.
+
+--------------------------------------------------
+
+4. FEATURE SPECIFICITY RULE
 
 Bad:
 
-"As a user I want notifications."
+User Management
 
 Good:
 
-"As a patient I want refill reminders
-3 days before medicine depletion."
+Peer Risk Pool Enrollment
+
+Policy Contribution Tracking
+
+Community Claim Voting
+
+Risk Score Verification
 
 --------------------------------------------------
 
-2. NO GENERIC SAAS OUTPUT
+5. REQUIREMENTS RULE
+
+Every requirement must be:
+
+Specific
+Testable
+Measurable
 
 Forbidden:
 
-dashboard
-analytics
-reports
+"The system should be fast."
 
-unless required by product.
+Correct:
 
---------------------------------------------------
-
-3. CREATE REAL FEATURES
-
-Each feature must solve a business problem.
+"The system shall return quote
+results within 2 seconds."
 
 --------------------------------------------------
 
-4. REQUIREMENTS MUST BE TESTABLE
+6. MERMAID RULES
 
-Every requirement must have
-acceptance criteria.
+Generate at most:
 
---------------------------------------------------
+3 Mermaid diagrams
 
-5. SYSTEM DESIGN MUST MATCH PRODUCT
+ONLY:
 
-Dating App ≠ Medicine App
+A. System Architecture
+B. Core User Flow
+C. ER Diagram
 
-Marketplace ≠ Insurance Platform
+Do not generate more.
 
-Never reuse architecture blindly.
+Every Mermaid block MUST begin with:
 
---------------------------------------------------
+flowchart LR
 
-6. USE REALISTIC NUMBERS
+OR
 
-Performance targets
+flowchart TD
 
-Latency
+OR
 
-Scale
+erDiagram
 
-Storage
+Do NOT place titles inside Mermaid.
 
-Must be realistic.
+Bad:
 
---------------------------------------------------
+```mermaid
+SYSTEM ARCHITECTURE
+User --> App
+````
 
-7. DO NOT INVENT AI FEATURES
+Correct:
 
-Only include AI if naturally required.
+```mermaid
+flowchart LR
+User --> WebApp
+WebApp --> API
+API --> Database
+```
+
+---
+
+7. DATABASE RULES
+
+Use real entities.
+
+Every entity must contain:
+
+Fields
+
+Primary Key
+
+Relationships
+
+Descriptions
+
+---
+
+8. API RULES
+
+Generate realistic REST APIs.
+
+Each endpoint must include:
+
+Method
+Route
+Purpose
+Request
+Response
+
+---
+
+9. NO GENERIC SAAS CONTENT
+
+Avoid:
+
+Dashboard
+Analytics
+Reports
+
+unless the business actually needs them.
+
+---
+
+10. NO AI HALLUCINATION
+
+Do not invent:
+
+AI Assistant
+LLM
+Chatbot
+Recommendation Engine
+
+unless required by the product.
+
+---
+
+11. INVESTOR GRADE OUTPUT
+
+Document should be detailed enough for:
+
+Founders
+
+Investors
+
+Designers
+
+Developers
+
+QA Teams
+
+to build immediately.
 
 ==================================================
-OUTPUT QUALITY
-==================================================
+QUALITY TARGET
+==============
 
-Minimum:
+Target Length:
 
-3500 words
-
-Preferred:
-
-5000 words
+4000-6000 words
 
 ==================================================
 """
 
+
         prompt = f"""
-You have received the following
-Business Analysis Report.
+You have received the following Business Analysis Report.
 
 ==================================================
-BUSINESS REPORT
+BUSINESS ANALYSIS
 ==================================================
 
-{ba_output}
+{ba_output[:15000]}
 
 ==================================================
-YOUR TASK
+TASK
 ==================================================
 
-Transform strategy into
-a complete Product Specification.
+Create a Product Specification.
+
+Output ONLY markdown.
 
 ==================================================
-SECTION 1
-PRODUCT VISION
+# PRODUCT VISION
 ==================================================
 
-Create:
+Include:
 
-- Product Mission
-- Product Vision
-- Product Principles
-- Product Goals
-- Product Constraints
+Mission
+
+Vision
+
+Strategic Goals
+
+Product Principles
+
+Constraints
+
+Success Criteria
 
 ==================================================
-SECTION 2
-MVP DEFINITION
+# MVP DEFINITION
 ==================================================
 
-Define:
+Table Format
 
-- MVP Scope
-- MVP Objectives
-- MVP Success Criteria
-- MVP Exclusions
+| Area | Included | Excluded | Reason |
 
 Include:
 
 Must Have
+
 Should Have
+
 Could Have
+
 Won't Have
 
 ==================================================
-SECTION 3
-FEATURE BREAKDOWN
+# FEATURE ARCHITECTURE
 ==================================================
 
-Create detailed feature hierarchy.
-
-Example:
-
-Authentication
-Profile Management
-Discovery
-Booking
-Payments
-
-etc.
+Create a feature hierarchy.
 
 For each feature:
 
-Purpose
-Business Value
-Dependencies
+| Feature |
+| Purpose |
+| Business Value |
+| Dependencies |
+| Priority |
+
+Minimum:
+
+10 features
 
 ==================================================
-SECTION 4
-USER STORIES
+# USER STORIES
 ==================================================
 
-Generate 15-20 user stories.
-
-Structure:
-
-Must Have
-Should Have
-Could Have
+Generate 20 stories.
 
 Format:
 
-As a [persona]
-I want [action]
-So that [benefit]
+### Story 1
+
+As a ...
+
+I want ...
+
+So that ...
 
 Acceptance Criteria:
 
 Given
+
 When
+
 Then
 
 ==================================================
-SECTION 5
-FUNCTIONAL REQUIREMENTS
+# FUNCTIONAL REQUIREMENTS
 ==================================================
 
-Generate minimum 40 requirements.
+Generate 40+ requirements.
 
-Table:
+Format:
 
 | ID |
-| Feature Area |
-| Description |
+| Requirement |
 | Acceptance Criteria |
 | Priority |
 
@@ -268,8 +398,7 @@ P1
 P2
 
 ==================================================
-SECTION 6
-NON FUNCTIONAL REQUIREMENTS
+# NON FUNCTIONAL REQUIREMENTS
 ==================================================
 
 Table:
@@ -277,8 +406,6 @@ Table:
 Performance
 
 Availability
-
-Reliability
 
 Security
 
@@ -295,53 +422,73 @@ Observability
 Disaster Recovery
 
 ==================================================
-SECTION 7
-SYSTEM ARCHITECTURE
+# SYSTEM ARCHITECTURE
 ==================================================
 
-Explain architecture.
+Create:
 
-Generate Mermaid Diagram.
+Architecture Overview
+
+Technology Components
+
+Then generate ONE valid Mermaid diagram.
 
 Example:
 
 ```mermaid
 flowchart LR
+User --> Frontend
+Frontend --> API
+API --> Database
 ````
 
-Use product-specific services.
+==================================================
+
+# DATABASE DESIGN
 
 ==================================================
-SECTION 8
-DATABASE DESIGN
-===============
 
 Create:
 
-Core Entities
+## Entities
 
-Relationships
+For each entity:
 
-Primary Keys
+Fields
 
-Foreign Keys
+PK
 
-Entity descriptions
+FK
 
-Then generate ERD Mermaid:
+Description
+
+Then generate ONE ER Diagram.
+
+Example:
 
 ```mermaid
 erDiagram
+
+USER {{
+string id PK
+string email
+}}
+
+ORDER {{
+string id PK
+string user_id FK
+}}
+
+USER ||--o{{ ORDER : places
 ```
 
 ==================================================
-SECTION 9
-API DESIGN
-==========
 
-Minimum 15 APIs.
+# API DESIGN
 
-Table:
+==================================================
+
+Generate minimum 15 APIs.
 
 | Method |
 | Endpoint |
@@ -350,45 +497,48 @@ Table:
 | Response |
 
 ==================================================
-SECTION 10
-WORKFLOW DIAGRAMS
-=================
 
-Create Mermaid diagrams for:
-
-User Onboarding
-
-Core Product Flow
-
-Transaction Flow
-
-Admin Flow
-
-Support Flow
+# CORE USER FLOW
 
 ==================================================
-SECTION 11
-UI/UX SPECIFICATION
-===================
+
+Generate ONE workflow diagram.
+
+Valid Mermaid only.
+
+Example:
+
+```mermaid
+flowchart TD
+
+User --> Signup
+
+Signup --> Verification
+
+Verification --> Dashboard
+```
+
+==================================================
+
+# UI UX SPECIFICATION
+
+==================================================
 
 Screen Inventory
 
-Screen Purpose
-
-Navigation Structure
+Navigation
 
 Design Principles
 
-Typography
+Accessibility
 
-Color System
-
-Accessibility Requirements
+Mobile Requirements
 
 ==================================================
-SECTION 12
-SECURITY MODEL
-==============
+
+# SECURITY MODEL
+
+==================================================
 
 Authentication
 
@@ -396,58 +546,40 @@ Authorization
 
 Encryption
 
+Audit Logs
+
 Fraud Prevention
 
-Data Protection
+==================================================
 
-Audit Logging
+# COMPLIANCE
 
 ==================================================
-SECTION 13
-COMPLIANCE REQUIREMENTS
-=======================
 
-Identify relevant compliance.
-
-Examples:
-
-GDPR
-
-CCPA
-
-HIPAA
-
-PCI-DSS
-
-SOC2
-
-Only include relevant ones.
+Only include regulations
+relevant to the product.
 
 ==================================================
-SECTION 14
-ANALYTICS FRAMEWORK
-===================
 
-Define events.
-
-Track:
-
-Acquisition
-
-Activation
-
-Retention
-
-Revenue
-
-Referral
+# ANALYTICS FRAMEWORK
 
 ==================================================
-SECTION 15
-SUCCESS METRICS
-===============
 
-Create KPI tables.
+Events
+
+Funnels
+
+KPIs
+
+==================================================
+
+# SUCCESS METRICS
+
+==================================================
+
+Provide:
+
+North Star Metric
 
 Month 1
 
@@ -457,30 +589,27 @@ Month 6
 
 Month 12
 
-Include:
-
-North Star Metric
-
-Conversion Rate
-
-Retention
-
-Revenue
-
-Operational Metrics
+Targets
 
 ==================================================
-IMPORTANT
-=========
+FINAL RULES
+===========
 
-No placeholders.
+1. Use compact markdown.
 
-No generic text.
+2. Avoid excessive whitespace.
 
-No missing sections.
+3. Use tables whenever possible.
 
-All requirements must be
-implementation-ready.
+4. Generate exactly 3 Mermaid diagrams.
+
+5. Mermaid must be syntactically valid.
+
+6. No placeholders.
+
+7. No generic content.
+
+8. No filler text.
 
 Generate complete content.
 """

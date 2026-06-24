@@ -187,6 +187,21 @@ class GroqClient:
             timeout=240
         )
 
+    def _get_model_for_size(self, estimated_tokens: int, current_model: str) -> str:
+        """
+        Given the estimated token size and the model that just failed,
+        return the next larger model that can support this size.
+        If no larger model is available, return None.
+        """
+        if current_model == "llama-3.1-8b-instant":
+            if estimated_tokens <= 10000:
+                return "llama-3.3-70b-versatile"
+            else:
+                return "meta-llama/llama-4-scout-17b-16e-instruct"
+        elif current_model == "llama-3.3-70b-versatile":
+            return "meta-llama/llama-4-scout-17b-16e-instruct"
+        return None
+
     def generate_stream(
         self,
         prompt: str,
@@ -196,10 +211,24 @@ class GroqClient:
         industry: str = ""
     ) -> Generator[str, None, None]:
 
+        # Estimate tokens (1 token is roughly 3.5 characters)
+        estimated_tokens = (len(prompt) + len(system_prompt)) // 3.5
+
+        # Decide starting model based on token limits
+        start_model = self.model
+        if start_model == "llama-3.3-70b-versatile" and estimated_tokens > 10000:
+            start_model = "meta-llama/llama-4-scout-17b-16e-instruct"
+        elif start_model == "llama-3.1-8b-instant" and estimated_tokens > 5000:
+            if estimated_tokens <= 10000:
+                start_model = "llama-3.3-70b-versatile"
+            else:
+                start_model = "meta-llama/llama-4-scout-17b-16e-instruct"
+
         payload = self._build_payload(
             prompt,
             system_prompt
         )
+        payload["model"] = start_model
 
         max_retries = 5
 
@@ -216,6 +245,7 @@ class GroqClient:
                 print(
                     f"[Groq]"
                     f" Agent={agent_type}"
+                    f" Model={payload.get('model')}"
                     f" Attempt={attempt+1}"
                 )
 
@@ -307,26 +337,53 @@ class GroqClient:
                 except Exception:
                     pass
 
-                if e.code in [413, 429] and payload.get("model") == "llama-3.3-70b-versatile":
-                    print(
-                        f"[Groq Fallback] Limit exceeded ({e.code}) for model '{payload.get('model')}'. "
-                        f"Switching to fallback 'meta-llama/llama-4-scout-17b-16e-instruct'..."
-                    )
-                    payload["model"] = "meta-llama/llama-4-scout-17b-16e-instruct"
-                    time.sleep(1)
-                    continue
-                elif e.code in [413, 429] and payload.get("model") == "meta-llama/llama-4-scout-17b-16e-instruct":
-                    print(
-                        f"[Groq Fallback] Limit exceeded ({e.code}) for model '{payload.get('model')}'. "
-                        f"Switching to fallback 'llama-3.1-8b-instant'..."
-                    )
-                    payload["model"] = "llama-3.1-8b-instant"
-                    time.sleep(1)
-                    continue
+                if e.code in [413, 429]:
+                    current_model = payload.get("model")
+                    next_model = self._get_model_for_size(estimated_tokens, current_model)
+
+                    if next_model:
+                        print(
+                            f"[Groq Fallback] Limit exceeded ({e.code}) for model '{current_model}'. "
+                            f"Switching to fallback '{next_model}'..."
+                        )
+                        payload["model"] = next_model
+                        time.sleep(2)
+                        continue
+                    else:
+                        # Cannot upgrade further, we must sleep/wait for token limit reset
+                        reset_time = 15
+                        try:
+                            for h_key, h_val in e.headers.items():
+                                if "reset-tokens" in h_key.lower():
+                                    val_str = h_val.strip().lower()
+                                    if "ms" in val_str:
+                                        reset_time = 1
+                                    elif "s" in val_str:
+                                        import re
+                                        match = re.search(r'([\d\.]+)\s*s', val_str)
+                                        if match:
+                                            reset_time = max(1, int(float(match.group(1))) + 1)
+                                    elif "m" in val_str:
+                                        import re
+                                        match = re.search(r'(?:([\d\.]+)\s*m)?\s*(?:([\d\.]+)\s*s)?', val_str)
+                                        if match:
+                                            mins = float(match.group(1)) if match.group(1) else 0
+                                            secs = float(match.group(2)) if match.group(2) else 0
+                                            reset_time = max(1, int(mins * 60 + secs) + 1)
+                        except Exception:
+                            pass
+
+                        reset_time = min(30, max(5, reset_time))
+                        print(
+                            f"[Groq Rate Limit] Limit exceeded ({e.code}) on model '{current_model}' (Estimated tokens: {estimated_tokens}). "
+                            f"Waiting {reset_time} seconds for TPM limit to reset (Attempt {attempt+1}/{max_retries})..."
+                        )
+                        time.sleep(reset_time)
+                        continue
 
                 if (
                     e.code in
-                    [429, 500, 502, 503]
+                    [500, 502, 503]
                     and
                     attempt <
                     max_retries - 1
